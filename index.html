@@ -1,0 +1,4325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Resume Builder · KodNest</title>
+    <style>
+        /* KodNest Premium Design System */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: #fcfcfc;
+            color: #1a1a1a;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .app {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* navigation */
+        .nav {
+            display: flex;
+            gap: 2.5rem;
+            padding: 1.75rem 2.5rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+            background: #ffffff;
+            letter-spacing: -0.01em;
+        }
+
+        .nav a {
+            text-decoration: none;
+            color: #8a8a8a;
+            font-weight: 450;
+            font-size: 0.95rem;
+            transition: color 0.2s ease;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .nav a:hover {
+            color: #000000;
+        }
+
+        .nav a.active {
+            color: #000000;
+            font-weight: 500;
+        }
+
+        .nav a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1.75rem;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: #000;
+        }
+
+        /* main container */
+        .container {
+            flex: 1;
+            padding: 2.5rem;
+            max-width: 1440px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* typography */
+        h1 {
+            font-weight: 450;
+            font-size: 3.5rem;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+            color: #000000;
+            margin-bottom: 2rem;
+        }
+
+        h2 {
+            font-weight: 450;
+            font-size: 1.75rem;
+            letter-spacing: -0.01em;
+            margin-bottom: 2rem;
+            color: #1a1a1a;
+        }
+
+        h3 {
+            font-weight: 500;
+            font-size: 0.9rem;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+            color: #6b6b6b;
+            margin-bottom: 1.25rem;
+        }
+
+        h4 {
+            font-weight: 500;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        /* headline for home */
+        .headline {
+            font-size: 4rem;
+            font-weight: 450;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+            max-width: 900px;
+            margin-bottom: 2.5rem;
+            color: #000;
+        }
+
+        /* buttons */
+        .btn {
+            display: inline-block;
+            background: #000000;
+            color: #ffffff;
+            border: none;
+            padding: 0.9rem 2.5rem;
+            font-size: 1rem;
+            font-weight: 450;
+            border-radius: 36px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            letter-spacing: -0.01em;
+            border: 1px solid transparent;
+        }
+
+        .btn:hover {
+            background: #2a2a2a;
+            transform: translateY(-1px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: #000000;
+            border: 1px solid #e0e0e0;
+        }
+
+        .btn-outline:hover {
+            background: #f8f8f8;
+            border-color: #b0b0b0;
+            transform: none;
+        }
+
+        .btn-small {
+            padding: 0.5rem 1.2rem;
+            font-size: 0.85rem;
+        }
+
+        .btn-icon {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #999;
+            font-size: 1.2rem;
+            line-height: 1;
+            padding: 0 0.25rem;
+        }
+
+        .btn-icon:hover {
+            color: #000;
+        }
+
+        /* export buttons */
+        .export-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .export-btn {
+            padding: 0.7rem 1.8rem;
+            font-size: 0.9rem;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: #ffffff;
+            border: 1px solid #e0e0e0;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .export-btn:hover {
+            background: #f5f5f5;
+            border-color: #999;
+        }
+
+        .export-btn.success {
+            background: #e8f5e9;
+            border-color: #4caf50;
+            color: #2e7d32;
+        }
+
+        .export-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* validation warning */
+        .validation-warning {
+            margin-top: 1rem;
+            padding: 1rem 1.5rem;
+            background: #fef9e7;
+            border: 1px solid #f5e6b8;
+            border-radius: 12px;
+            color: #8a6d3b;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .validation-warning.hidden {
+            display: none;
+        }
+
+        .warning-icon {
+            font-size: 1.2rem;
+        }
+
+        /* toast notification */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: #333;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* proof page styles */
+        .proof-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .proof-section {
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid #f5f5f5;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+        }
+
+        .proof-section-title {
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+            color: #000;
+            letter-spacing: -0.01em;
+        }
+
+        /* step grid */
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .step-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: #fafafa;
+            border-radius: 12px;
+            border: 1px solid #f0f0f0;
+        }
+
+        .step-status {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+        }
+
+        .step-status.completed {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .step-status.pending {
+            background: #f5f5f5;
+            color: #999;
+        }
+
+        .step-info {
+            flex: 1;
+        }
+
+        .step-name {
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: #333;
+        }
+
+        .step-status-text {
+            font-size: 0.75rem;
+            color: #888;
+        }
+
+        /* artifact inputs */
+        .artifact-input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .artifact-label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #555;
+            margin-bottom: 0.5rem;
+        }
+
+        .artifact-input {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            font-size: 0.9rem;
+            border: 1px solid #eaeaea;
+            border-radius: 12px;
+            background: #fafafa;
+            transition: all 0.2s ease;
+        }
+
+        .artifact-input:focus {
+            outline: none;
+            border-color: #000;
+            background: #fff;
+        }
+
+        .artifact-input.error {
+            border-color: #d32f2f;
+            background: #ffebee;
+        }
+
+        .input-hint {
+            font-size: 0.7rem;
+            color: #999;
+            margin-top: 0.25rem;
+        }
+
+        .input-hint.error {
+            color: #d32f2f;
+        }
+
+        /* checklist */
+        .checklist-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 0.75rem;
+            margin: 1rem 0;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            font-size: 0.85rem;
+            color: #555;
+        }
+
+        .checklist-item.completed {
+            color: #2e7d32;
+        }
+
+        .checklist-icon {
+            font-size: 1rem;
+        }
+
+        /* status badge */
+        .status-badge-large {
+            display: inline-block;
+            padding: 0.5rem 2rem;
+            font-size: 1rem;
+            font-weight: 500;
+            border-radius: 40px;
+            margin-bottom: 2rem;
+        }
+
+        .status-badge-large.in-progress {
+            background: #fff3e0;
+            color: #f57c00;
+            border: 1px solid #ffe0b2;
+        }
+
+        .status-badge-large.shipped {
+            background: #e8f5e9;
+            color: #2e7d32;
+            border: 1px solid #c8e6c9;
+        }
+
+        /* success message */
+        .success-message {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: #f5f5f5;
+            border-radius: 16px;
+            text-align: center;
+            font-size: 1.1rem;
+            color: #333;
+            border: 1px solid #eaeaea;
+        }
+
+        /* template picker */
+        .template-picker {
+            margin-bottom: 2rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .template-picker-title {
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            color: #6b6b6b;
+            margin-bottom: 1rem;
+            letter-spacing: 0.02em;
+        }
+
+        .template-grid {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .template-card {
+            width: 120px;
+            background: #ffffff;
+            border: 2px solid #eaeaea;
+            border-radius: 12px;
+            padding: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .template-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .template-card.active {
+            border-color: #0066cc;
+            box-shadow: 0 0 0 2px rgba(0,102,204,0.1);
+        }
+
+        .template-card.active::after {
+            content: '✓';
+            position: absolute;
+            top: -0.5rem;
+            right: -0.5rem;
+            width: 1.5rem;
+            height: 1.5rem;
+            background: #0066cc;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        .template-preview {
+            height: 80px;
+            background: #f5f5f5;
+            border-radius: 6px;
+            margin-bottom: 0.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .preview-classic .preview-header {
+            height: 8px;
+            background: #333;
+            width: 70%;
+            margin: 8px auto 4px;
+            border-radius: 2px;
+        }
+
+        .preview-classic .preview-line {
+            height: 3px;
+            background: #666;
+            width: 85%;
+            margin: 4px auto;
+            border-radius: 1px;
+        }
+
+        .preview-classic .preview-rule {
+            height: 1px;
+            background: #ccc;
+            width: 90%;
+            margin: 6px auto;
+        }
+
+        .preview-modern {
+            display: flex;
+        }
+
+        .preview-modern .preview-sidebar {
+            width: 35%;
+            height: 100%;
+            background: #ddd;
+        }
+
+        .preview-modern .preview-main {
+            width: 65%;
+            padding: 4px;
+        }
+
+        .preview-modern .preview-main-line {
+            height: 3px;
+            background: #aaa;
+            width: 80%;
+            margin: 4px;
+            border-radius: 1px;
+        }
+
+        .preview-minimal .preview-minimal-header {
+            height: 8px;
+            background: #333;
+            width: 60%;
+            margin: 8px auto 4px;
+            border-radius: 2px;
+        }
+
+        .preview-minimal .preview-minimal-line {
+            height: 3px;
+            background: #bbb;
+            width: 80%;
+            margin: 8px auto;
+            border-radius: 1px;
+        }
+
+        .template-name {
+            font-size: 0.8rem;
+            text-align: center;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .color-picker {
+            margin-bottom: 2rem;
+        }
+
+        .color-picker-title {
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            color: #6b6b6b;
+            margin-bottom: 1rem;
+            letter-spacing: 0.02em;
+        }
+
+        .color-grid {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .color-circle {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 2px solid transparent;
+            position: relative;
+        }
+
+        .color-circle:hover {
+            transform: scale(1.1);
+        }
+
+        .color-circle.active {
+            border-color: #000;
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.1);
+        }
+
+        .color-circle.active::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 1rem;
+            font-weight: bold;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+
+        /* builder two-column */
+        .builder-grid {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 2rem;
+            margin-top: 0.5rem;
+        }
+
+        .form-panel {
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 2.25rem;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.02);
+            border: 1px solid #f2f2f2;
+            height: fit-content;
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+
+        .form-section {
+            margin-bottom: 2.5rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid #f5f5f5;
+        }
+
+        .form-section:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .form-row {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            color: #8a8a8a;
+            margin-bottom: 0.4rem;
+            letter-spacing: 0.02em;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 0.6rem 0;
+            font-size: 0.95rem;
+            border: none;
+            border-bottom: 1px solid #efefef;
+            background: transparent;
+            transition: border-color 0.15s ease;
+            font-family: inherit;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-bottom-color: #000;
+        }
+
+        textarea {
+            min-height: 90px;
+            resize: vertical;
+        }
+
+        .char-counter {
+            font-size: 0.7rem;
+            color: #999;
+            text-align: right;
+            margin-top: 0.25rem;
+        }
+
+        .char-counter.warning {
+            color: #f57c00;
+        }
+
+        .char-counter.limit {
+            color: #d32f2f;
+        }
+
+        .tag-input-container {
+            border: 1px solid #efefef;
+            border-radius: 8px;
+            padding: 0.5rem;
+            min-height: 3rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            align-items: center;
+            background: #fafafa;
+        }
+
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            background: #eaeaea;
+            padding: 0.25rem 0.75rem;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            color: #333;
+            gap: 0.5rem;
+        }
+
+        .tag-remove {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #999;
+            font-size: 1rem;
+            line-height: 1;
+            padding: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .tag-remove:hover {
+            color: #d32f2f;
+        }
+
+        .tag-input-field {
+            border: none;
+            background: transparent;
+            padding: 0.25rem;
+            font-size: 0.85rem;
+            min-width: 120px;
+            flex: 1;
+        }
+
+        .tag-input-field:focus {
+            outline: none;
+        }
+
+        .skill-category {
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: #fafafa;
+            border-radius: 12px;
+        }
+
+        .skill-category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .skill-category-title {
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: #333;
+        }
+
+        .skill-count {
+            font-size: 0.8rem;
+            color: #999;
+            background: #eaeaea;
+            padding: 0.2rem 0.6rem;
+            border-radius: 30px;
+        }
+
+        .projects-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .project-entry {
+            border: 1px solid #efefef;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: #fafafa;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .project-title {
+            font-weight: 500;
+            color: #333;
+        }
+
+        .project-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .project-content {
+            padding: 1.5rem;
+            background: white;
+            border-top: 1px solid #efefef;
+        }
+
+        .project-entry.collapsed .project-content {
+            display: none;
+        }
+
+        .project-delete {
+            color: #999;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            padding: 0.25rem 0.5rem;
+        }
+
+        .project-delete:hover {
+            color: #d32f2f;
+        }
+
+        .project-expand {
+            color: #666;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .bullet-guidance {
+            font-size: 0.75rem;
+            margin-top: 0.25rem;
+            color: #8a8a8a;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        textarea:focus + .bullet-guidance,
+        .bullet-guidance.visible {
+            opacity: 1;
+        }
+
+        .guidance-icon {
+            font-size: 0.7rem;
+            color: #b0b0b0;
+        }
+
+        .guidance-text {
+            font-style: italic;
+        }
+
+        .entry-group {
+            margin-bottom: 1.75rem;
+            padding-bottom: 1.75rem;
+            border-bottom: 1px dashed #f0f0f0;
+            position: relative;
+        }
+
+        .entry-group:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .add-btn {
+            background: none;
+            border: 1px solid #eaeaea;
+            padding: 0.6rem 1.2rem;
+            font-size: 0.85rem;
+            border-radius: 30px;
+            color: #5a5a5a;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 450;
+        }
+
+        .add-btn:hover {
+            border-color: #000;
+            color: #000;
+            background: #fafafa;
+        }
+
+        .suggest-btn {
+            margin-top: 1rem;
+            background: #f0f0f0;
+            border: 1px solid #e0e0e0;
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+            border-radius: 30px;
+            color: #555;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .suggest-btn:hover {
+            background: #e5e5e5;
+            border-color: #ccc;
+        }
+
+        .suggest-btn.loading {
+            opacity: 0.7;
+            cursor: wait;
+        }
+
+        .preview-panel {
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 2rem;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.02);
+            border: 1px solid #f2f2f2;
+            height: fit-content;
+            position: sticky;
+            top: 2rem;
+        }
+
+        .ats-score-container {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: #ffffff;
+            border-radius: 16px;
+            border: 1px solid #f0f0f0;
+            text-align: center;
+        }
+
+        .score-header {
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            color: #6b6b6b;
+            margin-bottom: 1rem;
+            letter-spacing: 0.02em;
+        }
+
+        .circular-progress {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 1rem;
+            position: relative;
+        }
+
+        .circular-progress svg {
+            width: 120px;
+            height: 120px;
+            transform: rotate(-90deg);
+        }
+
+        .circular-progress circle {
+            fill: none;
+            stroke-width: 8;
+            stroke-linecap: round;
+        }
+
+        .circular-progress .bg-circle {
+            stroke: #f0f0f0;
+        }
+
+        .circular-progress .progress-circle {
+            stroke: var(--progress-color, #4caf50);
+            stroke-dasharray: 314;
+            stroke-dashoffset: calc(314 - (314 * var(--progress) / 100));
+            transition: stroke-dashoffset 0.3s ease;
+        }
+
+        .score-value {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.8rem;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .score-label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .score-label.needs-work {
+            color: #d32f2f;
+        }
+
+        .score-label.getting-there {
+            color: #f57c00;
+        }
+
+        .score-label.strong {
+            color: #2e7d32;
+        }
+
+        .improvements-list {
+            list-style: none;
+            text-align: left;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .improvements-list li {
+            font-size: 0.85rem;
+            color: #4a4a4a;
+            padding: 0.4rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .improvements-list li::before {
+            content: '○';
+            font-size: 0.7rem;
+            color: #c0c0c0;
+        }
+
+        .improvements-list li.completed {
+            color: #999;
+            text-decoration: line-through;
+        }
+
+        .improvements-list li.completed::before {
+            content: '✓';
+            color: #4caf50;
+        }
+
+        .suggestions {
+            list-style: none;
+            margin-top: 1rem;
+        }
+
+        .suggestions li {
+            font-size: 0.85rem;
+            color: #8a8a8a;
+            padding: 0.3rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .suggestions li::before {
+            content: '→';
+            font-size: 0.85rem;
+            color: #000;
+        }
+
+        :root {
+            --accent-color: hsl(168, 60%, 40%);
+            --accent-light: hsl(168, 60%, 95%);
+            --accent-dark: hsl(168, 60%, 25%);
+        }
+
+        .resume-preview {
+            max-width: 650px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 2rem;
+            border: 1px solid #f5f5f5;
+            border-radius: 16px;
+            transition: all 0.2s ease;
+        }
+
+        .resume-header {
+            margin-bottom: 2rem;
+        }
+
+        .resume-name {
+            font-size: 2.2rem;
+            line-height: 1.2;
+            margin-bottom: 0.75rem;
+            color: #000;
+            word-wrap: break-word;
+        }
+
+        .resume-contact {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            color: #6a6a6a;
+            font-size: 0.85rem;
+            padding-bottom: 1.25rem;
+        }
+
+        .resume-contact span {
+            word-break: break-word;
+        }
+
+        .resume-section {
+            margin-bottom: 1.75rem;
+            page-break-inside: avoid;
+        }
+
+        .resume-section-title {
+            font-size: 0.8rem;
+            padding-bottom: 0.4rem;
+            margin-bottom: 1rem;
+            page-break-after: avoid;
+            color: var(--accent-color);
+        }
+
+        .skills-group {
+            margin-bottom: 1rem;
+        }
+
+        .skills-group-title {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+
+        .skills-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .skill-pill {
+            background: var(--accent-light);
+            padding: 0.25rem 1rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            color: var(--accent-dark);
+            border: 1px solid var(--accent-color);
+        }
+
+        .projects-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .project-card {
+            border: 1px solid #f0f0f0;
+            border-radius: 8px;
+            padding: 1rem;
+        }
+
+        .project-card-title {
+            font-weight: 500;
+            font-size: 0.95rem;
+            margin-bottom: 0.25rem;
+            color: var(--accent-color);
+        }
+
+        .project-card-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.35rem;
+            margin: 0.5rem 0;
+        }
+
+        .tech-pill {
+            background: var(--accent-light);
+            padding: 0.15rem 0.6rem;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            color: var(--accent-dark);
+        }
+
+        .project-card-desc {
+            font-size: 0.8rem;
+            color: #555;
+            margin-bottom: 0.5rem;
+            line-height: 1.4;
+        }
+
+        .project-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .project-link {
+            font-size: 0.75rem;
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+
+        .project-link:hover {
+            text-decoration: underline;
+        }
+
+        .resume-item {
+            margin-bottom: 1.25rem;
+            page-break-inside: avoid;
+        }
+
+        .resume-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .resume-item-title {
+            font-weight: 500;
+            font-size: 1rem;
+            color: var(--accent-color);
+            margin-bottom: 0.2rem;
+            word-wrap: break-word;
+        }
+
+        .resume-item-subtitle {
+            font-size: 0.85rem;
+            color: #7a7a7a;
+            margin-bottom: 0.3rem;
+        }
+
+        .resume-item-desc {
+            font-size: 0.85rem;
+            color: #4a4a4a;
+            line-height: 1.5;
+            word-wrap: break-word;
+            white-space: pre-wrap;
+        }
+
+        .template-classic .resume-name {
+            font-family: 'Georgia', serif;
+            font-weight: 450;
+            letter-spacing: -0.02em;
+        }
+
+        .template-classic .resume-contact {
+            border-bottom: 2px solid var(--accent-color);
+        }
+
+        .template-classic .resume-section-title {
+            font-weight: 600;
+            text-transform: uppercase;
+            border-bottom: 2px solid var(--accent-color);
+        }
+
+        .template-modern {
+            display: block;
+            padding: 0;
+            border: none;
+        }
+
+        .template-minimal .resume-name {
+            font-family: 'Inter', sans-serif;
+            font-weight: 300;
+            font-size: 2.2rem;
+            letter-spacing: -0.02em;
+            color: var(--accent-color);
+        }
+
+        .template-minimal .resume-contact {
+            border-bottom: none;
+            padding-bottom: 0.5rem;
+            color: #999;
+        }
+
+        .template-minimal .resume-section-title {
+            font-weight: 300;
+            text-transform: uppercase;
+            border-bottom: none;
+            font-size: 0.9rem;
+            letter-spacing: 0.1em;
+            color: #999;
+        }
+
+        .template-minimal .resume-section {
+            margin-bottom: 2.5rem;
+        }
+
+        .template-minimal .resume-item {
+            border-left: 2px solid var(--accent-light);
+            padding-left: 1rem;
+        }
+
+        .template-minimal .skill-pill {
+            background: transparent;
+            border: 1px solid #eee;
+            color: #666;
+        }
+
+        .preview-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 3rem;
+            border: 1px solid #f5f5f5;
+            box-shadow: 0 20px 40px -20px rgba(0,0,0,0.1);
+        }
+
+        @media print {
+            body * {
+                visibility: hidden !important;
+                background: white !important;
+            }
+            
+            #finalPreview,
+            #finalPreview *,
+            .preview-container,
+            .preview-container * {
+                visibility: visible !important;
+            }
+            
+            #finalPreview {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                padding: 0.5in;
+                margin: 0;
+                border: none;
+                background: white !important;
+            }
+            
+            .nav, .template-picker, .color-picker, .export-bar, h2, .validation-warning, .ats-score-container {
+                display: none !important;
+            }
+            
+            .resume-preview {
+                border: none;
+                padding: 0;
+                background: white !important;
+            }
+            
+            .resume-section {
+                page-break-inside: avoid;
+            }
+            
+            .resume-item {
+                page-break-inside: avoid;
+            }
+            
+            h1, h2, h3, h4 {
+                page-break-after: avoid;
+            }
+            
+            .resume-contact {
+                page-break-after: avoid;
+            }
+        }
+
+        .proof-placeholder {
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 5rem 3rem;
+            text-align: center;
+            border: 1px solid #f5f5f5;
+            color: #b0b0b0;
+            font-size: 1.2rem;
+        }
+
+        .proof-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            opacity: 0.5;
+        }
+
+        .text-muted {
+            color: #9a9a9a;
+        }
+
+        .flex-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .autosave-indicator {
+            font-size: 0.8rem;
+            color: #9a9a9a;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .autosave-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #4caf50;
+            opacity: 0.7;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 1rem;
+            height: 1rem;
+            border: 2px solid #f0f0f0;
+            border-top-color: #999;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .builder-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav {
+                padding: 1rem;
+                gap: 1rem;
+                flex-wrap: wrap;
+            }
+            
+            .template-grid {
+                justify-content: center;
+            }
+            
+            .export-bar {
+                flex-direction: column;
+            }
+            
+            .preview-container {
+                padding: 1rem;
+            }
+        }
+
+        .copy-fallback {
+            position: absolute;
+            left: -9999px;
+            top: -9999px;
+            width: 1px;
+            height: 1px;
+            opacity: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <!-- navigation -->
+        <nav class="nav">
+            <a href="/" data-route="/">Home</a>
+            <a href="/builder" data-route="/builder">Builder</a>
+            <a href="/preview" data-route="/preview">Preview</a>
+            <a href="/proof" data-route="/proof">Proof</a>
+        </nav>
+
+        <!-- router outlet -->
+        <main class="container" id="router-outlet">
+            <!-- home page -->
+            <div id="home" class="page" style="display: block;">
+                <div style="max-width: 800px; margin: 3rem 0;">
+                    <div class="headline">Build a Resume That Gets Read.</div>
+                    <a href="/builder" class="btn" id="startBuilderBtn">Start Building →</a>
+                </div>
+                <div class="text-muted" style="margin-top: 6rem; border-top: 1px solid #f0f0f0; padding-top: 2rem;">
+                    <p style="font-size: 0.9rem;">© KodNest · AI Resume Builder · Premium edition</p>
+                </div>
+            </div>
+
+            <!-- builder page -->
+            <div id="builder" class="page" style="display: none;">
+                <div class="flex-between">
+                    <h2>Build your resume</h2>
+                    <div style="display: flex; gap: 1rem; align-items: center;">
+                        <div class="autosave-indicator">
+                            <span class="autosave-dot"></span>
+                            <span>Auto-saved</span>
+                        </div>
+                        <button class="btn-outline" id="loadSampleBtn" style="padding: 0.7rem 1.8rem;">Load Professional Sample</button>
+                        <button class="btn-outline" id="clearStorageBtn" style="padding: 0.7rem 1.8rem;">Clear All Data</button>
+                    </div>
+                </div>
+                
+                <div class="builder-grid">
+                    <!-- left: form sections -->
+                    <div class="form-panel" id="builderForm">
+                        <!-- personal info -->
+                        <div class="form-section">
+                            <h3>Personal Info</h3>
+                            <div class="form-row">
+                                <label>Full name</label>
+                                <input type="text" placeholder="e.g. Sarah Johnson" id="fullName" oninput="handleInputChange()">
+                            </div>
+                            <div class="form-row">
+                                <label>Email</label>
+                                <input type="email" placeholder="sarah.johnson@email.com" id="email" oninput="handleInputChange()">
+                            </div>
+                            <div class="form-row">
+                                <label>Phone</label>
+                                <input type="tel" placeholder="+1 (415) 555-0123" id="phone" oninput="handleInputChange()">
+                            </div>
+                            <div class="form-row">
+                                <label>Location</label>
+                                <input type="text" placeholder="San Francisco, CA" id="location" oninput="handleInputChange()">
+                            </div>
+                        </div>
+
+                        <!-- summary -->
+                        <div class="form-section">
+                            <h3>Professional Summary</h3>
+                            <textarea placeholder="Brief overview of your experience and goals..." id="summary" oninput="handleInputChange()"></textarea>
+                        </div>
+
+                        <!-- education -->
+                        <div class="form-section">
+                            <h3>Education</h3>
+                            <div id="educationContainer"></div>
+                            <button class="add-btn" id="addEducation">+ Add education</button>
+                        </div>
+
+                        <!-- experience -->
+                        <div class="form-section">
+                            <h3>Work Experience</h3>
+                            <div id="experienceContainer"></div>
+                            <button class="add-btn" id="addExperience">+ Add experience</button>
+                        </div>
+
+                        <!-- projects section with accordion -->
+                        <div class="form-section">
+                            <div class="flex-between">
+                                <h3>Projects</h3>
+                                <button class="add-btn" id="addProjectBtn">+ Add Project</button>
+                            </div>
+                            <div id="projectsContainer" class="projects-container">
+                                <!-- Projects will be dynamically added here -->
+                            </div>
+                        </div>
+
+                        <!-- skills section with categories -->
+                        <div class="form-section">
+                            <div class="flex-between">
+                                <h3>Skills</h3>
+                                <button class="suggest-btn" id="suggestSkillsBtn">
+                                    <span>✨</span> Suggest Skills
+                                </button>
+                            </div>
+                            
+                            <!-- Technical Skills -->
+                            <div class="skill-category" id="technicalSkillsCategory">
+                                <div class="skill-category-header">
+                                    <span class="skill-category-title">Technical Skills</span>
+                                    <span class="skill-count" id="technicalCount">0</span>
+                                </div>
+                                <div class="tag-input-container" id="technicalTags">
+                                    <input type="text" class="tag-input-field" placeholder="Type skill and press Enter..." id="technicalInput">
+                                </div>
+                            </div>
+
+                            <!-- Soft Skills -->
+                            <div class="skill-category" id="softSkillsCategory">
+                                <div class="skill-category-header">
+                                    <span class="skill-category-title">Soft Skills</span>
+                                    <span class="skill-count" id="softCount">0</span>
+                                </div>
+                                <div class="tag-input-container" id="softTags">
+                                    <input type="text" class="tag-input-field" placeholder="Type skill and press Enter..." id="softInput">
+                                </div>
+                            </div>
+
+                            <!-- Tools & Technologies -->
+                            <div class="skill-category" id="toolsSkillsCategory">
+                                <div class="skill-category-header">
+                                    <span class="skill-category-title">Tools & Technologies</span>
+                                    <span class="skill-count" id="toolsCount">0</span>
+                                </div>
+                                <div class="tag-input-container" id="toolsTags">
+                                    <input type="text" class="tag-input-field" placeholder="Type skill and press Enter..." id="toolsInput">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- links -->
+                        <div class="form-section">
+                            <h3>Links</h3>
+                            <div class="form-row">
+                                <label>GitHub</label>
+                                <input type="url" placeholder="github.com/username" id="github" oninput="handleInputChange()">
+                            </div>
+                            <div class="form-row">
+                                <label>LinkedIn</label>
+                                <input type="url" placeholder="linkedin.com/in/username" id="linkedin" oninput="handleInputChange()">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- right: live preview + ATS score + improvements -->
+                    <div class="preview-panel">
+                        <!-- ATS Score Meter - Circular Progress -->
+                        <div class="ats-score-container">
+                            <div class="score-header">ATS Resume Score</div>
+                            <div class="circular-progress" id="circularProgress">
+                                <svg viewBox="0 0 120 120">
+                                    <circle class="bg-circle" cx="60" cy="60" r="50"></circle>
+                                    <circle class="progress-circle" cx="60" cy="60" r="50"></circle>
+                                </svg>
+                                <div class="score-value" id="scoreValue">0</div>
+                            </div>
+                            <div class="score-label" id="scoreLabel">Needs Work</div>
+                            
+                            <!-- Improvement Suggestions -->
+                            <ul class="improvements-list" id="improvementsList"></ul>
+                        </div>
+
+                        <!-- Template Picker -->
+                        <div class="template-picker">
+                            <div class="template-picker-title">Choose Template</div>
+                            <div class="template-grid" id="templateGrid">
+                                <div class="template-card active" data-template="classic">
+                                    <div class="template-preview preview-classic">
+                                        <div class="preview-header"></div>
+                                        <div class="preview-line"></div>
+                                        <div class="preview-rule"></div>
+                                        <div class="preview-line" style="width: 60%"></div>
+                                    </div>
+                                    <div class="template-name">Classic</div>
+                                </div>
+                                <div class="template-card" data-template="modern">
+                                    <div class="template-preview preview-modern">
+                                        <div class="preview-sidebar"></div>
+                                        <div class="preview-main">
+                                            <div class="preview-main-line"></div>
+                                            <div class="preview-main-line" style="width: 60%"></div>
+                                            <div class="preview-main-line" style="width: 80%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="template-name">Modern</div>
+                                </div>
+                                <div class="template-card" data-template="minimal">
+                                    <div class="template-preview preview-minimal">
+                                        <div class="preview-minimal-header"></div>
+                                        <div class="preview-minimal-line"></div>
+                                        <div class="preview-minimal-line" style="width: 60%"></div>
+                                    </div>
+                                    <div class="template-name">Minimal</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Color Theme Picker -->
+                        <div class="color-picker">
+                            <div class="color-picker-title">Accent Color</div>
+                            <div class="color-grid" id="colorGrid">
+                                <div class="color-circle active" data-color="hsl(168, 60%, 40%)" style="background: hsl(168, 60%, 40%);" title="Teal"></div>
+                                <div class="color-circle" data-color="hsl(220, 60%, 35%)" style="background: hsl(220, 60%, 35%);" title="Navy"></div>
+                                <div class="color-circle" data-color="hsl(345, 60%, 35%)" style="background: hsl(345, 60%, 35%);" title="Burgundy"></div>
+                                <div class="color-circle" data-color="hsl(150, 50%, 30%)" style="background: hsl(150, 50%, 30%);" title="Forest"></div>
+                                <div class="color-circle" data-color="hsl(0, 0%, 25%)" style="background: hsl(0, 0%, 25%);" title="Charcoal"></div>
+                            </div>
+                        </div>
+
+                        <h3 style="margin-bottom: 1.5rem;">Live preview</h3>
+                        <div id="livePreview" class="resume-preview template-classic">
+                            <!-- Preview will be dynamically updated -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- preview page -->
+            <div id="preview" class="page" style="display: none;">
+                <div class="flex-between">
+                    <h2>Resume preview</h2>
+                    <div class="export-bar">
+                        <button class="export-btn" id="printResumeBtn">
+                            <span>📄</span> Save as PDF
+                        </button>
+                        <button class="export-btn" id="copyTextBtn">
+                            <span>📋</span> Copy as Text
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Validation Warning -->
+                <div id="validationWarning" class="validation-warning hidden">
+                    <span class="warning-icon">⚠️</span>
+                    <span>Your resume may look incomplete. Consider adding your name and at least one project or experience.</span>
+                </div>
+                
+                <!-- Template Picker for Preview -->
+                <div class="template-picker">
+                    <div class="template-picker-title">Choose Template</div>
+                    <div class="template-grid" id="previewTemplateGrid">
+                        <div class="template-card active" data-template="classic">
+                            <div class="template-preview preview-classic">
+                                <div class="preview-header"></div>
+                                <div class="preview-line"></div>
+                                <div class="preview-rule"></div>
+                                <div class="preview-line" style="width: 60%"></div>
+                            </div>
+                            <div class="template-name">Classic</div>
+                        </div>
+                        <div class="template-card" data-template="modern">
+                            <div class="template-preview preview-modern">
+                                <div class="preview-sidebar"></div>
+                                <div class="preview-main">
+                                    <div class="preview-main-line"></div>
+                                    <div class="preview-main-line" style="width: 60%"></div>
+                                    <div class="preview-main-line" style="width: 80%"></div>
+                                </div>
+                            </div>
+                            <div class="template-name">Modern</div>
+                        </div>
+                        <div class="template-card" data-template="minimal">
+                            <div class="template-preview preview-minimal">
+                                <div class="preview-minimal-header"></div>
+                                <div class="preview-minimal-line"></div>
+                                <div class="preview-minimal-line" style="width: 60%"></div>
+                            </div>
+                            <div class="template-name">Minimal</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Color Theme Picker for Preview -->
+                <div class="color-picker">
+                    <div class="color-picker-title">Accent Color</div>
+                    <div class="color-grid" id="previewColorGrid">
+                        <div class="color-circle active" data-color="hsl(168, 60%, 40%)" style="background: hsl(168, 60%, 40%);" title="Teal"></div>
+                        <div class="color-circle" data-color="hsl(220, 60%, 35%)" style="background: hsl(220, 60%, 35%);" title="Navy"></div>
+                        <div class="color-circle" data-color="hsl(345, 60%, 35%)" style="background: hsl(345, 60%, 35%);" title="Burgundy"></div>
+                        <div class="color-circle" data-color="hsl(150, 50%, 30%)" style="background: hsl(150, 50%, 30%);" title="Forest"></div>
+                        <div class="color-circle" data-color="hsl(0, 0%, 25%)" style="background: hsl(0, 0%, 25%);" title="Charcoal"></div>
+                    </div>
+                </div>
+                
+                <div class="preview-container">
+                    <div id="finalPreview" class="resume-preview template-classic">
+                        <!-- Preview will be populated with builder data -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- proof page -->
+            <div id="proof" class="page" style="display: none;">
+                <div class="proof-container">
+                    <div class="flex-between">
+                        <h2>Project Completion</h2>
+                        <button class="export-btn" id="copySubmissionBtn">
+                            <span>📋</span> Copy Final Submission
+                        </button>
+                    </div>
+                    
+                    <!-- Status Badge -->
+                    <div id="statusBadge" class="status-badge-large in-progress">
+                        In Progress
+                    </div>
+                    
+                    <!-- Step Completion Overview -->
+                    <div class="proof-section">
+                        <h3 class="proof-section-title">Step Completion Overview</h3>
+                        <div class="steps-grid" id="stepsGrid">
+                            <!-- Steps will be populated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <!-- Artifact Collection -->
+                    <div class="proof-section">
+                        <h3 class="proof-section-title">Artifact Collection</h3>
+                        <p class="text-muted" style="margin-bottom: 1.5rem;">Provide your project links to mark as shipped</p>
+                        
+                        <div class="artifact-input-group">
+                            <label class="artifact-label">Lovable Project Link</label>
+                            <input type="url" class="artifact-input" id="lovableUrl" placeholder="https://lovable.dev/project/..." oninput="validateUrls()">
+                            <div class="input-hint" id="lovableHint">Enter your Lovable project URL</div>
+                        </div>
+                        
+                        <div class="artifact-input-group">
+                            <label class="artifact-label">GitHub Repository Link</label>
+                            <input type="url" class="artifact-input" id="githubUrl" placeholder="https://github.com/username/repo" oninput="validateUrls()">
+                            <div class="input-hint" id="githubHint">Enter your GitHub repository URL</div>
+                        </div>
+                        
+                        <div class="artifact-input-group">
+                            <label class="artifact-label">Deployed URL</label>
+                            <input type="url" class="artifact-input" id="deployedUrl" placeholder="https://your-app.vercel.app" oninput="validateUrls()">
+                            <div class="input-hint" id="deployedHint">Enter your live deployment URL</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Checklist -->
+                    <div class="proof-section">
+                        <h3 class="proof-section-title">Validation Checklist</h3>
+                        <div class="checklist-grid" id="checklistGrid">
+                            <!-- Checklist items will be populated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <!-- Success Message (hidden by default) -->
+                    <div id="successMessage" class="success-message hidden">
+                        Project 3 Shipped Successfully.
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Hidden textarea for fallback copy method -->
+    <textarea class="copy-fallback" id="copyFallback"></textarea>
+
+    <script>
+        (function() {
+            // ========== STATE MANAGEMENT ==========
+            const STORAGE_KEY = 'resumeBuilderData';
+            const TEMPLATE_KEY = 'resumeTemplate';
+            const COLOR_KEY = 'accentColor';
+            const SUBMISSION_KEY = 'rb_final_submission';
+            
+            // Action verbs for summary scoring
+            const ACTION_VERBS = [
+                'built', 'led', 'designed', 'improved', 'created', 
+                'developed', 'managed', 'coordinated', 'executed', 'launched',
+                'delivered', 'drove', 'spearheaded', 'established', 'optimized',
+                'automated', 'architected', 'engineered', 'pioneered', 'implemented'
+            ];
+            
+            // Default empty state
+            const defaultState = {
+                personal: {
+                    fullName: '',
+                    email: '',
+                    phone: '',
+                    location: ''
+                },
+                summary: '',
+                education: [],
+                experience: [],
+                projects: [],
+                skills: {
+                    technical: [],
+                    soft: [],
+                    tools: []
+                },
+                links: {
+                    github: '',
+                    linkedin: ''
+                }
+            };
+
+            // Step definitions
+            const steps = [
+                { id: 1, name: 'Personal Info' },
+                { id: 2, name: 'Professional Summary' },
+                { id: 3, name: 'Education' },
+                { id: 4, name: 'Work Experience' },
+                { id: 5, name: 'Projects' },
+                { id: 6, name: 'Skills' },
+                { id: 7, name: 'Links' },
+                { id: 8, name: 'Template & Color' }
+            ];
+
+            // Checklist items
+            const checklistItems = [
+                { id: 1, text: 'Personal info complete (name, email)' },
+                { id: 2, text: 'Summary provided (>50 chars)' },
+                { id: 3, text: 'Education entry complete' },
+                { id: 4, text: 'Experience with bullet points' },
+                { id: 5, text: 'At least 2 projects' },
+                { id: 6, text: 'At least 5 skills total' },
+                { id: 7, text: 'GitHub or LinkedIn link' },
+                { id: 8, text: 'Phone number provided' },
+                { id: 9, text: 'Action verbs in summary' },
+                { id: 10, text: 'ATS score > 70 (Strong Resume)' }
+            ];
+
+            // Load saved state or use default
+            let resumeState = loadState();
+            
+            // Load submission data
+            let submissionData = loadSubmission();
+            
+            // Load saved template or use classic
+            let currentTemplate = localStorage.getItem(TEMPLATE_KEY) || 'classic';
+            
+            // Load saved color or use teal
+            let currentColor = localStorage.getItem(COLOR_KEY) || 'hsl(168, 60%, 40%)';
+
+            // ========== ROUTER ==========
+            const pages = {
+                '/': document.getElementById('home'),
+                '/builder': document.getElementById('builder'),
+                '/preview': document.getElementById('preview'),
+                '/proof': document.getElementById('proof')
+            };
+            
+            const navLinks = document.querySelectorAll('.nav a');
+            const startBuilderBtn = document.getElementById('startBuilderBtn');
+
+            function showPage(path) {
+                Object.values(pages).forEach(page => {
+                    if (page) page.style.display = 'none';
+                });
+                
+                if (pages[path]) {
+                    pages[path].style.display = 'block';
+                }
+                
+                navLinks.forEach(link => {
+                    const href = link.getAttribute('href');
+                    if (href === path) {
+                        link.classList.add('active');
+                    } else {
+                        link.classList.remove('active');
+                    }
+                });
+                
+                if (path === '/preview') {
+                    updateFinalPreview();
+                    validateResume();
+                    calculateATSScore();
+                } else if (path === '/proof') {
+                    renderProofPage();
+                }
+                
+                // Update template and color UI for the current page
+                updateTemplateUI();
+                updateColorUI();
+                
+                history.pushState({}, '', path);
+            }
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    showPage(link.getAttribute('href'));
+                });
+            });
+
+            if (startBuilderBtn) {
+                startBuilderBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    showPage('/builder');
+                });
+            }
+
+            window.addEventListener('popstate', () => {
+                const path = window.location.pathname;
+                if (pages[path]) {
+                    showPage(path);
+                } else {
+                    showPage('/');
+                }
+            });
+
+            const initialPath = window.location.pathname;
+            if (pages[initialPath]) {
+                showPage(initialPath);
+            } else {
+                showPage('/');
+            }
+
+            // ========== CLEAR ALL DATA ==========
+            function resetToEmptyState() {
+                // Reset resumeState to default
+                resumeState = JSON.parse(JSON.stringify(defaultState));
+                
+                // Clear all form fields
+                document.getElementById('fullName').value = '';
+                document.getElementById('email').value = '';
+                document.getElementById('phone').value = '';
+                document.getElementById('location').value = '';
+                document.getElementById('summary').value = '';
+                
+                // Clear education
+                const eduContainer = document.getElementById('educationContainer');
+                eduContainer.innerHTML = '';
+                addEducationEntry(eduContainer); // Add one empty entry
+                
+                // Clear experience
+                const expContainer = document.getElementById('experienceContainer');
+                expContainer.innerHTML = '';
+                addExperienceEntry(expContainer); // Add one empty entry
+                
+                // Clear projects
+                const projectsContainer = document.getElementById('projectsContainer');
+                projectsContainer.innerHTML = '';
+                resumeState.projects = [];
+                
+                // Clear skills
+                skillCategories.technical.skills = [];
+                skillCategories.soft.skills = [];
+                skillCategories.tools.skills = [];
+                
+                renderSkillCategory('technical');
+                renderSkillCategory('soft');
+                renderSkillCategory('tools');
+                
+                // Clear links
+                document.getElementById('github').value = '';
+                document.getElementById('linkedin').value = '';
+                
+                // Save empty state to localStorage
+                saveState();
+                
+                // Update preview and score
+                updatePreview();
+                calculateATSScore();
+                validateResume();
+                
+                showToast('All data cleared');
+            }
+
+            document.getElementById('clearStorageBtn')?.addEventListener('click', function() {
+                if (confirm('Are you sure you want to clear all resume data? This cannot be undone.')) {
+                    resetToEmptyState();
+                }
+            });
+
+            // ========== SUBMISSION FUNCTIONS ==========
+            
+            function loadSubmission() {
+                try {
+                    const saved = localStorage.getItem(SUBMISSION_KEY);
+                    if (saved) {
+                        return JSON.parse(saved);
+                    }
+                } catch (e) {
+                    console.error('Failed to load submission:', e);
+                }
+                return {
+                    lovableUrl: '',
+                    githubUrl: '',
+                    deployedUrl: ''
+                };
+            }
+
+            function saveSubmission() {
+                const data = {
+                    lovableUrl: document.getElementById('lovableUrl')?.value || '',
+                    githubUrl: document.getElementById('githubUrl')?.value || '',
+                    deployedUrl: document.getElementById('deployedUrl')?.value || ''
+                };
+                localStorage.setItem(SUBMISSION_KEY, JSON.stringify(data));
+                return data;
+            }
+
+            function validateUrl(url) {
+                if (!url) return false;
+                try {
+                    new URL(url);
+                    return true;
+                } catch {
+                    return false;
+                }
+            }
+
+            function validateUrls() {
+                const lovable = document.getElementById('lovableUrl');
+                const github = document.getElementById('githubUrl');
+                const deployed = document.getElementById('deployedUrl');
+                
+                const lovableHint = document.getElementById('lovableHint');
+                const githubHint = document.getElementById('githubHint');
+                const deployedHint = document.getElementById('deployedHint');
+                
+                // Validate Lovable URL
+                if (lovable.value && !validateUrl(lovable.value)) {
+                    lovable.classList.add('error');
+                    lovableHint.textContent = 'Please enter a valid URL';
+                    lovableHint.classList.add('error');
+                } else {
+                    lovable.classList.remove('error');
+                    lovableHint.textContent = 'Enter your Lovable project URL';
+                    lovableHint.classList.remove('error');
+                }
+                
+                // Validate GitHub URL
+                if (github.value && !validateUrl(github.value)) {
+                    github.classList.add('error');
+                    githubHint.textContent = 'Please enter a valid URL';
+                    githubHint.classList.add('error');
+                } else {
+                    github.classList.remove('error');
+                    githubHint.textContent = 'Enter your GitHub repository URL';
+                    githubHint.classList.remove('error');
+                }
+                
+                // Validate Deployed URL
+                if (deployed.value && !validateUrl(deployed.value)) {
+                    deployed.classList.add('error');
+                    deployedHint.textContent = 'Please enter a valid URL';
+                    deployedHint.classList.add('error');
+                } else {
+                    deployed.classList.remove('error');
+                    deployedHint.textContent = 'Enter your live deployment URL';
+                    deployedHint.classList.remove('error');
+                }
+                
+                // Save to localStorage
+                saveSubmission();
+                
+                // Update shipped status
+                updateShippedStatus();
+            }
+
+            function getStepStatus() {
+                const fullName = document.getElementById('fullName')?.value || '';
+                const email = document.getElementById('email')?.value || '';
+                const summary = document.getElementById('summary')?.value || '';
+                
+                // Education
+                const eduEntries = document.querySelectorAll('.education-entry');
+                const hasEducation = eduEntries.length > 0 && 
+                    Array.from(eduEntries).some(entry => 
+                        entry.querySelector('.edu-degree')?.value || 
+                        entry.querySelector('.edu-school')?.value
+                    );
+                
+                // Experience with bullets
+                const expEntries = document.querySelectorAll('.experience-entry');
+                const hasExperience = Array.from(expEntries).some(entry => {
+                    const desc = entry.querySelector('.exp-desc')?.value || '';
+                    return desc.trim().length > 0;
+                });
+                
+                // Projects
+                const projectsCount = resumeState.projects?.length || 0;
+                
+                // Skills
+                const technicalSkills = skillCategories.technical.skills.length;
+                const softSkills = skillCategories.soft.skills.length;
+                const toolsSkills = skillCategories.tools.skills.length;
+                const totalSkills = technicalSkills + softSkills + toolsSkills;
+                
+                // Links
+                const github = document.getElementById('github')?.value || '';
+                const linkedin = document.getElementById('linkedin')?.value || '';
+                
+                // Template and color (always true since they have defaults)
+                const hasTemplate = true;
+                
+                return {
+                    1: !!(fullName && email),
+                    2: summary.length > 0,
+                    3: hasEducation,
+                    4: hasExperience,
+                    5: projectsCount >= 2,
+                    6: totalSkills >= 5,
+                    7: !!(github || linkedin),
+                    8: hasTemplate
+                };
+            }
+
+            function getChecklistStatus() {
+                const fullName = document.getElementById('fullName')?.value || '';
+                const email = document.getElementById('email')?.value || '';
+                const summary = document.getElementById('summary')?.value || '';
+                const phone = document.getElementById('phone')?.value || '';
+                const github = document.getElementById('github')?.value || '';
+                const linkedin = document.getElementById('linkedin')?.value || '';
+                
+                // Education
+                const eduEntries = document.querySelectorAll('.education-entry');
+                const hasEducation = eduEntries.length > 0 && 
+                    Array.from(eduEntries).some(entry => 
+                        entry.querySelector('.edu-degree')?.value && 
+                        entry.querySelector('.edu-school')?.value
+                    );
+                
+                // Experience with bullets
+                const expEntries = document.querySelectorAll('.experience-entry');
+                const hasExperienceWithBullets = Array.from(expEntries).some(entry => {
+                    const desc = entry.querySelector('.exp-desc')?.value || '';
+                    return desc.trim().length > 0;
+                });
+                
+                // Projects
+                const projectsCount = resumeState.projects?.length || 0;
+                
+                // Skills
+                const technicalSkills = skillCategories.technical.skills.length;
+                const softSkills = skillCategories.soft.skills.length;
+                const toolsSkills = skillCategories.tools.skills.length;
+                const totalSkills = technicalSkills + softSkills + toolsSkills;
+                
+                // Action verbs in summary
+                const summaryLower = summary.toLowerCase();
+                const hasActionVerbs = ACTION_VERBS.some(verb => summaryLower.includes(verb));
+                
+                // ATS score
+                const score = calculateATSScore();
+                
+                return {
+                    1: !!(fullName && email),
+                    2: summary.length > 50,
+                    3: hasEducation,
+                    4: hasExperienceWithBullets,
+                    5: projectsCount >= 2,
+                    6: totalSkills >= 5,
+                    7: !!(github || linkedin),
+                    8: !!phone,
+                    9: hasActionVerbs,
+                    10: score >= 70
+                };
+            }
+
+            function checkAllStepsComplete() {
+                const stepStatus = getStepStatus();
+                return Object.values(stepStatus).every(status => status === true);
+            }
+
+            function checkAllChecklistComplete() {
+                const checklistStatus = getChecklistStatus();
+                return Object.values(checklistStatus).every(status => status === true);
+            }
+
+            function checkAllUrlsValid() {
+                const lovable = document.getElementById('lovableUrl')?.value || '';
+                const github = document.getElementById('githubUrl')?.value || '';
+                const deployed = document.getElementById('deployedUrl')?.value || '';
+                
+                return lovable && github && deployed && 
+                       validateUrl(lovable) && validateUrl(github) && validateUrl(deployed);
+            }
+
+            function updateShippedStatus() {
+                const stepsComplete = checkAllStepsComplete();
+                const checklistComplete = checkAllChecklistComplete();
+                const urlsValid = checkAllUrlsValid();
+                
+                const canShip = stepsComplete && checklistComplete && urlsValid;
+                
+                const statusBadge = document.getElementById('statusBadge');
+                const successMessage = document.getElementById('successMessage');
+                
+                if (canShip) {
+                    statusBadge.className = 'status-badge-large shipped';
+                    statusBadge.textContent = 'Shipped';
+                    successMessage.classList.remove('hidden');
+                } else {
+                    statusBadge.className = 'status-badge-large in-progress';
+                    statusBadge.textContent = 'In Progress';
+                    successMessage.classList.add('hidden');
+                }
+                
+                return canShip;
+            }
+
+            function renderProofPage() {
+                // Populate URLs from localStorage
+                document.getElementById('lovableUrl').value = submissionData.lovableUrl || '';
+                document.getElementById('githubUrl').value = submissionData.githubUrl || '';
+                document.getElementById('deployedUrl').value = submissionData.deployedUrl || '';
+                
+                // Render steps
+                const stepsGrid = document.getElementById('stepsGrid');
+                const stepStatus = getStepStatus();
+                
+                stepsGrid.innerHTML = '';
+                steps.forEach(step => {
+                    const isCompleted = stepStatus[step.id];
+                    
+                    const stepItem = document.createElement('div');
+                    stepItem.className = 'step-item';
+                    stepItem.innerHTML = `
+                        <div class="step-status ${isCompleted ? 'completed' : 'pending'}">
+                            ${isCompleted ? '✓' : '○'}
+                        </div>
+                        <div class="step-info">
+                            <div class="step-name">Step ${step.id}: ${step.name}</div>
+                            <div class="step-status-text">${isCompleted ? 'Completed' : 'Pending'}</div>
+                        </div>
+                    `;
+                    stepsGrid.appendChild(stepItem);
+                });
+                
+                // Render checklist
+                const checklistGrid = document.getElementById('checklistGrid');
+                const checklistStatus = getChecklistStatus();
+                
+                checklistGrid.innerHTML = '';
+                checklistItems.forEach(item => {
+                    const isCompleted = checklistStatus[item.id];
+                    
+                    const checklistItem = document.createElement('div');
+                    checklistItem.className = `checklist-item ${isCompleted ? 'completed' : ''}`;
+                    checklistItem.innerHTML = `
+                        <span class="checklist-icon">${isCompleted ? '✓' : '○'}</span>
+                        <span>${item.text}</span>
+                    `;
+                    checklistGrid.appendChild(checklistItem);
+                });
+                
+                // Update shipped status
+                updateShippedStatus();
+            }
+
+            // ========== COPY SUBMISSION ==========
+            document.getElementById('copySubmissionBtn')?.addEventListener('click', function() {
+                const lovable = document.getElementById('lovableUrl')?.value || '[Not provided]';
+                const github = document.getElementById('githubUrl')?.value || '[Not provided]';
+                const deployed = document.getElementById('deployedUrl')?.value || '[Not provided]';
+                
+                const text = `------------------------------------------
+AI Resume Builder — Final Submission
+
+Lovable Project: ${lovable}
+GitHub Repository: ${github}
+Live Deployment: ${deployed}
+
+Core Capabilities:
+- Structured resume builder
+- Deterministic ATS scoring
+- Template switching
+- PDF export with clean formatting
+- Persistence + validation checklist
+------------------------------------------`;
+
+                copyToClipboard(text, 'Copy Submission');
+            });
+
+            // ========== SKILLS TAG INPUT ==========
+            
+            // Initialize skill categories
+            const skillCategories = {
+                technical: {
+                    container: document.getElementById('technicalTags'),
+                    input: document.getElementById('technicalInput'),
+                    countEl: document.getElementById('technicalCount'),
+                    skills: resumeState.skills?.technical || []
+                },
+                soft: {
+                    container: document.getElementById('softTags'),
+                    input: document.getElementById('softInput'),
+                    countEl: document.getElementById('softCount'),
+                    skills: resumeState.skills?.soft || []
+                },
+                tools: {
+                    container: document.getElementById('toolsTags'),
+                    input: document.getElementById('toolsInput'),
+                    countEl: document.getElementById('toolsCount'),
+                    skills: resumeState.skills?.tools || []
+                }
+            };
+
+            // Render tags for a category
+            function renderSkillCategory(category) {
+                const data = skillCategories[category];
+                if (!data || !data.container) return;
+                
+                // Clear container but keep input
+                const input = data.input;
+                data.container.innerHTML = '';
+                
+                // Add all skill tags
+                data.skills.forEach(skill => {
+                    const tag = document.createElement('span');
+                    tag.className = 'tag';
+                    tag.innerHTML = `
+                        ${skill}
+                        <button class="tag-remove" onclick="removeSkill('${category}', '${skill.replace(/'/g, "\\'")}')">×</button>
+                    `;
+                    data.container.appendChild(tag);
+                });
+                
+                // Add input back
+                data.container.appendChild(input);
+                
+                // Update count
+                if (data.countEl) {
+                    data.countEl.textContent = data.skills.length;
+                }
+            }
+
+            // Add skill to category
+            window.addSkill = function(category, skill) {
+                if (!skill || !skill.trim()) return;
+                
+                const data = skillCategories[category];
+                if (!data) return;
+                
+                // Check for duplicates (case insensitive)
+                const exists = data.skills.some(s => s.toLowerCase() === skill.toLowerCase());
+                if (!exists) {
+                    data.skills.push(skill.trim());
+                    renderSkillCategory(category);
+                    updateResumeState();
+                    handleInputChange();
+                }
+                
+                // Clear input
+                data.input.value = '';
+            };
+
+            // Remove skill from category
+            window.removeSkill = function(category, skill) {
+                const data = skillCategories[category];
+                if (!data) return;
+                
+                data.skills = data.skills.filter(s => s !== skill);
+                renderSkillCategory(category);
+                updateResumeState();
+                handleInputChange();
+            };
+
+            // Set up tag input handlers
+            function setupTagInputs() {
+                const technicalInput = document.getElementById('technicalInput');
+                if (technicalInput) {
+                    technicalInput.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter') {
+                            e.preventDefault();
+                            addSkill('technical', e.target.value);
+                        }
+                    });
+                }
+
+                const softInput = document.getElementById('softInput');
+                if (softInput) {
+                    softInput.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter') {
+                            e.preventDefault();
+                            addSkill('soft', e.target.value);
+                        }
+                    });
+                }
+
+                const toolsInput = document.getElementById('toolsInput');
+                if (toolsInput) {
+                    toolsInput.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter') {
+                            e.preventDefault();
+                            addSkill('tools', e.target.value);
+                        }
+                    });
+                }
+            }
+
+            // Suggest skills button with loading
+            document.getElementById('suggestSkillsBtn')?.addEventListener('click', function() {
+                const btn = this;
+                btn.classList.add('loading');
+                btn.innerHTML = '<span class="loading-spinner"></span> Loading...';
+                
+                setTimeout(() => {
+                    // Add suggested skills
+                    const suggestions = {
+                        technical: ['TypeScript', 'React', 'Node.js', 'PostgreSQL', 'GraphQL'],
+                        soft: ['Team Leadership', 'Problem Solving'],
+                        tools: ['Git', 'Docker', 'AWS']
+                    };
+                    
+                    // Add each skill if not already present
+                    suggestions.technical.forEach(skill => {
+                        if (!skillCategories.technical.skills.includes(skill)) {
+                            skillCategories.technical.skills.push(skill);
+                        }
+                    });
+                    
+                    suggestions.soft.forEach(skill => {
+                        if (!skillCategories.soft.skills.includes(skill)) {
+                            skillCategories.soft.skills.push(skill);
+                        }
+                    });
+                    
+                    suggestions.tools.forEach(skill => {
+                        if (!skillCategories.tools.skills.includes(skill)) {
+                            skillCategories.tools.skills.push(skill);
+                        }
+                    });
+                    
+                    // Re-render all categories
+                    renderSkillCategory('technical');
+                    renderSkillCategory('soft');
+                    renderSkillCategory('tools');
+                    
+                    // Update state and preview
+                    updateResumeState();
+                    handleInputChange();
+                    
+                    // Reset button
+                    btn.classList.remove('loading');
+                    btn.innerHTML = '<span>✨</span> Suggest Skills';
+                }, 1000);
+            });
+
+            // ========== PROJECTS ACCORDION ==========
+            
+            // Add new project
+            document.getElementById('addProjectBtn')?.addEventListener('click', function() {
+                const projectsContainer = document.getElementById('projectsContainer');
+                const projectId = 'project_' + Date.now();
+                
+                const projectEntry = document.createElement('div');
+                projectEntry.className = 'project-entry';
+                projectEntry.id = projectId;
+                projectEntry.innerHTML = `
+                    <div class="project-header" onclick="toggleProject('${projectId}')">
+                        <span class="project-title">New Project</span>
+                        <div class="project-actions">
+                            <button class="project-delete" onclick="deleteProject('${projectId}', event)">×</button>
+                            <span class="project-expand">▼</span>
+                        </div>
+                    </div>
+                    <div class="project-content">
+                        <div class="form-row">
+                            <label>Project Title</label>
+                            <input type="text" placeholder="e.g. E-commerce Platform" class="project-title-input" oninput="updateProjectTitle('${projectId}', this.value); handleInputChange()">
+                        </div>
+                        <div class="form-row">
+                            <label>Description (max 200 chars)</label>
+                            <textarea placeholder="Describe your project..." class="project-desc-input" maxlength="200" oninput="updateProjectDesc('${projectId}', this.value); updateCharCounter(this); handleInputChange()"></textarea>
+                            <div class="char-counter">0/200</div>
+                        </div>
+                        <div class="form-row">
+                            <label>Tech Stack</label>
+                            <div class="tag-input-container project-tech-container" id="tech-${projectId}">
+                                <input type="text" class="tag-input-field" placeholder="Type tech and press Enter..." onkeydown="addProjectTech(event, '${projectId}')">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <label>Live URL (optional)</label>
+                            <input type="url" placeholder="https://..." class="project-live-input" oninput="updateProjectLive('${projectId}', this.value); handleInputChange()">
+                        </div>
+                        <div class="form-row">
+                            <label>GitHub URL (optional)</label>
+                            <input type="url" placeholder="https://github.com/..." class="project-github-input" oninput="updateProjectGithub('${projectId}', this.value); handleInputChange()">
+                        </div>
+                    </div>
+                `;
+                
+                projectsContainer.appendChild(projectEntry);
+                
+                // Initialize project data
+                if (!resumeState.projects) resumeState.projects = [];
+                resumeState.projects.push({
+                    id: projectId,
+                    title: 'New Project',
+                    description: '',
+                    techStack: [],
+                    liveUrl: '',
+                    githubUrl: '',
+                    collapsed: false
+                });
+                
+                handleInputChange();
+            });
+
+            // Toggle project collapse
+            window.toggleProject = function(projectId) {
+                const project = document.getElementById(projectId);
+                if (project) {
+                    project.classList.toggle('collapsed');
+                    
+                    // Update state
+                    const projectData = resumeState.projects.find(p => p.id === projectId);
+                    if (projectData) {
+                        projectData.collapsed = project.classList.contains('collapsed');
+                    }
+                }
+            };
+
+            // Delete project
+            window.deleteProject = function(projectId, event) {
+                event.stopPropagation();
+                
+                const project = document.getElementById(projectId);
+                if (project) {
+                    project.remove();
+                    
+                    // Remove from state
+                    resumeState.projects = resumeState.projects.filter(p => p.id !== projectId);
+                    handleInputChange();
+                }
+            };
+
+            // Update project title
+            window.updateProjectTitle = function(projectId, title) {
+                const project = document.getElementById(projectId);
+                if (project) {
+                    const headerTitle = project.querySelector('.project-title');
+                    if (headerTitle) {
+                        headerTitle.textContent = title || 'Untitled Project';
+                    }
+                    
+                    const projectData = resumeState.projects.find(p => p.id === projectId);
+                    if (projectData) {
+                        projectData.title = title;
+                    }
+                }
+            };
+
+            // Update project description
+            window.updateProjectDesc = function(projectId, desc) {
+                const projectData = resumeState.projects.find(p => p.id === projectId);
+                if (projectData) {
+                    projectData.description = desc;
+                }
+            };
+
+            // Update project live URL
+            window.updateProjectLive = function(projectId, url) {
+                const projectData = resumeState.projects.find(p => p.id === projectId);
+                if (projectData) {
+                    projectData.liveUrl = url;
+                }
+            };
+
+            // Update project GitHub URL
+            window.updateProjectGithub = function(projectId, url) {
+                const projectData = resumeState.projects.find(p => p.id === projectId);
+                if (projectData) {
+                    projectData.githubUrl = url;
+                }
+            };
+
+            // Add tech to project
+            window.addProjectTech = function(event, projectId) {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    const input = event.target;
+                    const tech = input.value.trim();
+                    
+                    if (tech) {
+                        const projectData = resumeState.projects.find(p => p.id === projectId);
+                        if (projectData) {
+                            if (!projectData.techStack) projectData.techStack = [];
+                            
+                            // Check for duplicates
+                            if (!projectData.techStack.includes(tech)) {
+                                projectData.techStack.push(tech);
+                                
+                                // Add tag to UI
+                                const container = document.getElementById(`tech-${projectId}`);
+                                if (container) {
+                                    const tag = document.createElement('span');
+                                    tag.className = 'tag';
+                                    tag.innerHTML = `
+                                        ${tech}
+                                        <button class="tag-remove" onclick="removeProjectTech('${projectId}', '${tech.replace(/'/g, "\\'")}', event)">×</button>
+                                    `;
+                                    container.insertBefore(tag, input);
+                                }
+                                
+                                input.value = '';
+                                handleInputChange();
+                            }
+                        }
+                    }
+                }
+            };
+
+            // Remove tech from project
+            window.removeProjectTech = function(projectId, tech, event) {
+                event.preventDefault();
+                
+                const projectData = resumeState.projects.find(p => p.id === projectId);
+                if (projectData && projectData.techStack) {
+                    projectData.techStack = projectData.techStack.filter(t => t !== tech);
+                    
+                    // Remove tag from UI
+                    const tag = event.target.closest('.tag');
+                    if (tag) tag.remove();
+                    
+                    handleInputChange();
+                }
+            };
+
+            // Update character counter
+            window.updateCharCounter = function(textarea) {
+                const counter = textarea.nextElementSibling;
+                if (counter && counter.classList.contains('char-counter')) {
+                    const length = textarea.value.length;
+                    counter.textContent = `${length}/200`;
+                    
+                    counter.classList.remove('warning', 'limit');
+                    if (length > 180) {
+                        counter.classList.add('warning');
+                    }
+                    if (length >= 200) {
+                        counter.classList.add('limit');
+                    }
+                }
+            };
+
+            // ========== TEMPLATE FUNCTIONS ==========
+            
+            function updateTemplateUI() {
+                // Update template cards in builder
+                const builderCards = document.querySelectorAll('#builder .template-card');
+                builderCards.forEach(card => {
+                    const template = card.dataset.template;
+                    if (template === currentTemplate) {
+                        card.classList.add('active');
+                    } else {
+                        card.classList.remove('active');
+                    }
+                });
+                
+                // Update template cards in preview
+                const previewCards = document.querySelectorAll('#preview .template-card');
+                previewCards.forEach(card => {
+                    const template = card.dataset.template;
+                    if (template === currentTemplate) {
+                        card.classList.add('active');
+                    } else {
+                        card.classList.remove('active');
+                    }
+                });
+            }
+
+            function setTemplate(template) {
+                currentTemplate = template;
+                localStorage.setItem(TEMPLATE_KEY, template);
+                
+                // Update all preview elements
+                const livePreview = document.getElementById('livePreview');
+                const finalPreview = document.getElementById('finalPreview');
+                
+                if (livePreview) {
+                    livePreview.className = `resume-preview template-${template}`;
+                }
+                
+                if (finalPreview) {
+                    finalPreview.className = `resume-preview template-${template}`;
+                }
+                
+                updateTemplateUI();
+            }
+
+            // ========== COLOR FUNCTIONS ==========
+            
+            function updateColorUI() {
+                // Update color circles in builder
+                const builderCircles = document.querySelectorAll('#builder .color-circle');
+                builderCircles.forEach(circle => {
+                    const color = circle.dataset.color;
+                    if (color === currentColor) {
+                        circle.classList.add('active');
+                    } else {
+                        circle.classList.remove('active');
+                    }
+                });
+                
+                // Update color circles in preview
+                const previewCircles = document.querySelectorAll('#preview .color-circle');
+                previewCircles.forEach(circle => {
+                    const color = circle.dataset.color;
+                    if (color === currentColor) {
+                        circle.classList.add('active');
+                    } else {
+                        circle.classList.remove('active');
+                    }
+                });
+                
+                // Update CSS variable
+                document.documentElement.style.setProperty('--accent-color', currentColor);
+                
+                // Calculate light and dark variants
+                const match = currentColor.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/);
+                if (match) {
+                    const hue = match[1];
+                    const sat = match[2];
+                    document.documentElement.style.setProperty('--accent-light', `hsl(${hue}, ${sat}%, 95%)`);
+                    document.documentElement.style.setProperty('--accent-dark', `hsl(${hue}, ${sat}%, 25%)`);
+                }
+            }
+
+            function setColor(color) {
+                currentColor = color;
+                localStorage.setItem(COLOR_KEY, color);
+                updateColorUI();
+            }
+
+            // ========== ATS SCORING FUNCTIONS ==========
+            
+            function calculateATSScore() {
+                let score = 0;
+                const improvements = [];
+                
+                // Get values directly from DOM
+                const fullName = document.getElementById('fullName')?.value || '';
+                const email = document.getElementById('email')?.value || '';
+                const phone = document.getElementById('phone')?.value || '';
+                const summary = document.getElementById('summary')?.value || '';
+                const github = document.getElementById('github')?.value || '';
+                const linkedin = document.getElementById('linkedin')?.value || '';
+                
+                // Get education entries
+                const eduEntries = document.querySelectorAll('.education-entry');
+                const hasEducation = eduEntries.length > 0 && 
+                    Array.from(eduEntries).some(entry => 
+                        entry.querySelector('.edu-degree')?.value || 
+                        entry.querySelector('.edu-school')?.value
+                    );
+                
+                // Get experience entries with bullets
+                const expEntries = document.querySelectorAll('.experience-entry');
+                const hasExperienceWithBullets = Array.from(expEntries).some(entry => {
+                    const desc = entry.querySelector('.exp-desc')?.value || '';
+                    return desc.trim().length > 0;
+                });
+                
+                // Get projects
+                const projectsCount = resumeState.projects?.length || 0;
+                
+                // Get skills count
+                const technicalSkills = skillCategories.technical.skills.length;
+                const softSkills = skillCategories.soft.skills.length;
+                const toolsSkills = skillCategories.tools.skills.length;
+                const totalSkills = technicalSkills + softSkills + toolsSkills;
+                
+                // Check summary for action verbs
+                const summaryLower = summary.toLowerCase();
+                const hasActionVerbs = ACTION_VERBS.some(verb => summaryLower.includes(verb));
+                
+                // Rule 1: Name provided (+10)
+                if (fullName.trim()) {
+                    score += 10;
+                } else {
+                    improvements.push('Add your name (+10 points)');
+                }
+                
+                // Rule 2: Email provided (+10)
+                if (email.trim()) {
+                    score += 10;
+                } else {
+                    improvements.push('Add your email (+10 points)');
+                }
+                
+                // Rule 3: Summary > 50 chars (+10)
+                if (summary.length > 50) {
+                    score += 10;
+                } else {
+                    improvements.push('Write a longer summary (min 50 characters) (+10 points)');
+                }
+                
+                // Rule 4: At least 1 experience entry with bullets (+15)
+                if (hasExperienceWithBullets) {
+                    score += 15;
+                } else {
+                    improvements.push('Add work experience with bullet points (+15 points)');
+                }
+                
+                // Rule 5: At least 1 education entry (+10)
+                if (hasEducation) {
+                    score += 10;
+                } else {
+                    improvements.push('Add education details (+10 points)');
+                }
+                
+                // Rule 6: At least 5 skills (+10)
+                if (totalSkills >= 5) {
+                    score += 10;
+                } else {
+                    improvements.push(`Add ${5 - totalSkills} more skills (target 5+) (+10 points)`);
+                }
+                
+                // Rule 7: At least 1 project (+10)
+                if (projectsCount >= 1) {
+                    score += 10;
+                } else {
+                    improvements.push('Add at least one project (+10 points)');
+                }
+                
+                // Rule 8: Phone provided (+5)
+                if (phone.trim()) {
+                    score += 5;
+                } else {
+                    improvements.push('Add phone number (+5 points)');
+                }
+                
+                // Rule 9: LinkedIn provided (+5)
+                if (linkedin.trim()) {
+                    score += 5;
+                } else {
+                    improvements.push('Add LinkedIn profile (+5 points)');
+                }
+                
+                // Rule 10: GitHub provided (+5)
+                if (github.trim()) {
+                    score += 5;
+                } else {
+                    improvements.push('Add GitHub profile (+5 points)');
+                }
+                
+                // Rule 11: Summary contains action verbs (+10)
+                if (hasActionVerbs) {
+                    score += 10;
+                } else {
+                    improvements.push('Use action verbs in summary (built, led, designed, etc.) (+10 points)');
+                }
+                
+                // Cap at 100
+                score = Math.min(100, score);
+                
+                // Update circular progress
+                updateCircularProgress(score);
+                
+                // Update improvements list
+                updateImprovementsList(improvements);
+                
+                return score;
+            }
+            
+            function updateCircularProgress(score) {
+                const progressCircle = document.querySelector('.circular-progress .progress-circle');
+                const scoreValue = document.getElementById('scoreValue');
+                const scoreLabel = document.getElementById('scoreLabel');
+                
+                if (!progressCircle || !scoreValue || !scoreLabel) return;
+                
+                // Update score value
+                scoreValue.textContent = score;
+                
+                // Update progress circle
+                document.documentElement.style.setProperty('--progress', score);
+                
+                // Set color based on score
+                let color;
+                let labelText;
+                
+                if (score < 40) {
+                    color = '#d32f2f'; // Red
+                    labelText = 'Needs Work';
+                    scoreLabel.className = 'score-label needs-work';
+                } else if (score < 70) {
+                    color = '#f57c00'; // Amber/Orange
+                    labelText = 'Getting There';
+                    scoreLabel.className = 'score-label getting-there';
+                } else {
+                    color = '#2e7d32'; // Green
+                    labelText = 'Strong Resume';
+                    scoreLabel.className = 'score-label strong';
+                }
+                
+                document.documentElement.style.setProperty('--progress-color', color);
+                scoreLabel.textContent = labelText;
+            }
+            
+            function updateImprovementsList(improvements) {
+                const improvementsList = document.getElementById('improvementsList');
+                if (!improvementsList) return;
+                
+                improvementsList.innerHTML = '';
+                
+                // Show top 5 improvements
+                improvements.slice(0, 5).forEach(improvement => {
+                    const li = document.createElement('li');
+                    li.textContent = improvement;
+                    improvementsList.appendChild(li);
+                });
+                
+                if (improvements.length === 0) {
+                    const li = document.createElement('li');
+                    li.textContent = 'Great job! Your resume is well-optimized.';
+                    li.style.color = '#4caf50';
+                    li.style.textDecoration = 'none';
+                    improvementsList.appendChild(li);
+                }
+            }
+
+            // ========== UPDATE RESUME STATE ==========
+            function updateResumeState() {
+                resumeState.skills = {
+                    technical: skillCategories.technical.skills,
+                    soft: skillCategories.soft.skills,
+                    tools: skillCategories.tools.skills
+                };
+            }
+
+            // ========== PREVIEW UPDATE FUNCTIONS ==========
+            function updatePreview() {
+                const previewDiv = document.getElementById('livePreview');
+                if (!previewDiv) return;
+                
+                // Get ALL form values directly from the DOM
+                const fullName = document.getElementById('fullName')?.value || '';
+                const email = document.getElementById('email')?.value || '';
+                const phone = document.getElementById('phone')?.value || '';
+                const location = document.getElementById('location')?.value || '';
+                const summary = document.getElementById('summary')?.value || '';
+                
+                // Get education entries directly from DOM
+                const eduEntries = document.querySelectorAll('.education-entry');
+                let educationHtml = '';
+                eduEntries.forEach(entry => {
+                    const degree = entry.querySelector('.edu-degree')?.value || '';
+                    const school = entry.querySelector('.edu-school')?.value || '';
+                    const year = entry.querySelector('.edu-year')?.value || '';
+                    if (degree || school || year) {
+                        educationHtml += `
+                            <div class="resume-item">
+                                <div class="resume-item-title">${degree || 'Degree'}</div>
+                                <div class="resume-item-subtitle">${school || 'Institution'} · ${year || 'Year'}</div>
+                            </div>
+                        `;
+                    }
+                });
+                
+                // Get experience entries directly from DOM
+                const expEntries = document.querySelectorAll('.experience-entry');
+                let experienceHtml = '';
+                expEntries.forEach(entry => {
+                    const title = entry.querySelector('.exp-title')?.value || '';
+                    const company = entry.querySelector('.exp-company')?.value || '';
+                    const duration = entry.querySelector('.exp-duration')?.value || '';
+                    const desc = entry.querySelector('.exp-desc')?.value || '';
+                    if (title || company) {
+                        experienceHtml += `
+                            <div class="resume-item">
+                                <div class="resume-item-title">${title || 'Job Title'}</div>
+                                <div class="resume-item-subtitle">${company || 'Company'} · ${duration || 'Duration'}</div>
+                                ${desc ? `<div class="resume-item-desc">${desc.replace(/\n/g, '<br>')}</div>` : ''}
+                            </div>
+                        `;
+                    }
+                });
+                
+                // Get projects from resumeState
+                let projectsHtml = '';
+                if (resumeState.projects && resumeState.projects.length > 0) {
+                    projectsHtml = '<div class="projects-grid">';
+                    resumeState.projects.forEach(project => {
+                        if (project.title || project.description || (project.techStack && project.techStack.length > 0)) {
+                            projectsHtml += `
+                                <div class="project-card">
+                                    ${project.title ? `<div class="project-card-title">${project.title}</div>` : ''}
+                                    ${project.description ? `<div class="project-card-desc">${project.description}</div>` : ''}
+                                    ${project.techStack && project.techStack.length > 0 ? `
+                                        <div class="project-card-tech">
+                                            ${project.techStack.map(tech => `<span class="tech-pill">${tech}</span>`).join('')}
+                                        </div>
+                                    ` : ''}
+                                    <div class="project-links">
+                                        ${project.liveUrl ? `<a href="${project.liveUrl}" class="project-link" target="_blank">🔗 Live</a>` : ''}
+                                        ${project.githubUrl ? `<a href="${project.githubUrl}" class="project-link" target="_blank">📁 GitHub</a>` : ''}
+                                    </div>
+                                </div>
+                            `;
+                        }
+                    });
+                    projectsHtml += '</div>';
+                }
+                
+                // Get skills from skillCategories
+                const technicalSkills = skillCategories.technical?.skills || [];
+                const softSkills = skillCategories.soft?.skills || [];
+                const toolsSkills = skillCategories.tools?.skills || [];
+                
+                // Get links
+                const github = document.getElementById('github')?.value || '';
+                const linkedin = document.getElementById('linkedin')?.value || '';
+                const links = [];
+                if (github) links.push(github);
+                if (linkedin) links.push(linkedin);
+                const linksHtml = links.length ? links.join(' · ') : '';
+                
+                // For modern template, build two-column layout
+                if (currentTemplate === 'modern') {
+                    let modernPreview = `
+                        <div style="display: grid; grid-template-columns: 30% 70%; gap: 2rem; min-height: 100%;">
+                            <!-- Sidebar -->
+                            <div style="background: var(--accent-light); padding: 1.5rem; border-radius: 12px; height: fit-content;">
+                                <div style="margin-bottom: 2rem;">
+                                    <h3 style="font-size: 1rem; font-weight: 600; color: var(--accent-dark); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em;">Contact</h3>
+                                    <div style="font-size: 0.85rem; color: #333; line-height: 1.6;">
+                                        ${fullName ? `<div style="font-weight: 500; margin-bottom: 0.5rem;">${fullName}</div>` : ''}
+                                        ${email ? `<div>${email}</div>` : ''}
+                                        ${phone ? `<div>${phone}</div>` : ''}
+                                        ${location ? `<div>${location}</div>` : ''}
+                                    </div>
+                                </div>
+                                
+                                ${technicalSkills.length > 0 ? `
+                                    <div style="margin-bottom: 2rem;">
+                                        <h3 style="font-size: 1rem; font-weight: 600; color: var(--accent-dark); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em;">Technical Skills</h3>
+                                        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                                            ${technicalSkills.map(skill => `
+                                                <span style="background: var(--accent-color); color: white; padding: 0.25rem 0.75rem; border-radius: 30px; font-size: 0.8rem;">${skill}</span>
+                                            `).join('')}
+                                        </div>
+                                    </div>
+                                ` : ''}
+                                
+                                ${toolsSkills.length > 0 ? `
+                                    <div style="margin-bottom: 2rem;">
+                                        <h3 style="font-size: 1rem; font-weight: 600; color: var(--accent-dark); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em;">Tools</h3>
+                                        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                                            ${toolsSkills.map(skill => `
+                                                <span style="background: var(--accent-color); color: white; padding: 0.25rem 0.75rem; border-radius: 30px; font-size: 0.8rem;">${skill}</span>
+                                            `).join('')}
+                                        </div>
+                                    </div>
+                                ` : ''}
+                                
+                                ${softSkills.length > 0 ? `
+                                    <div style="margin-bottom: 2rem;">
+                                        <h3 style="font-size: 1rem; font-weight: 600; color: var(--accent-dark); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em;">Soft Skills</h3>
+                                        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                                            ${softSkills.map(skill => `
+                                                <span style="background: var(--accent-color); color: white; padding: 0.25rem 0.75rem; border-radius: 30px; font-size: 0.8rem;">${skill}</span>
+                                            `).join('')}
+                                        </div>
+                                    </div>
+                                ` : ''}
+                            </div>
+                            
+                            <!-- Main Content -->
+                            <div style="padding-right: 1rem;">
+                                ${summary ? `
+                                    <div style="margin-bottom: 2rem;">
+                                        <h3 style="font-size: 1rem; font-weight: 600; color: var(--accent-color); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em;">Summary</h3>
+                                        <div style="font-size: 0.9rem; color: #555; line-height: 1.6;">${summary.replace(/\n/g, '<br>')}</div>
+                                    </div>
+                                ` : ''}
+                                
+                                ${educationHtml ? `
+                                    <div style="margin-bottom: 2rem;">
+                                        <h3 style="font-size: 1rem; font-weight: 600; color: var(--accent-color); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em;">Education</h3>
+                                        ${educationHtml}
+                                    </div>
+                                ` : ''}
+                                
+                                ${experienceHtml ? `
+                                    <div style="margin-bottom: 2rem;">
+                                        <h3 style="font-size: 1rem; font-weight: 600; color: var(--accent-color); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em;">Experience</h3>
+                                        ${experienceHtml}
+                                    </div>
+                                ` : ''}
+                                
+                                ${projectsHtml ? `
+                                    <div style="margin-bottom: 2rem;">
+                                        <h3 style="font-size: 1rem; font-weight: 600; color: var(--accent-color); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em;">Projects</h3>
+                                        ${projectsHtml}
+                                    </div>
+                                ` : ''}
+                                
+                                ${linksHtml ? `
+                                    <div>
+                                        <h3 style="font-size: 1rem; font-weight: 600; color: var(--accent-color); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em;">Links</h3>
+                                        <div style="font-size: 0.85rem; color: #666;">${linksHtml}</div>
+                                    </div>
+                                ` : ''}
+                            </div>
+                        </div>
+                    `;
+                    
+                    previewDiv.innerHTML = modernPreview;
+                    previewDiv.className = `resume-preview template-${currentTemplate}`;
+                    return;
+                }
+                
+                // For classic and minimal templates (single column)
+                let skillsHtml = '';
+                if (technicalSkills.length > 0) {
+                    skillsHtml += `
+                        <div class="skills-group">
+                            <div class="skills-group-title">Technical</div>
+                            <div class="skills-pills">
+                                ${technicalSkills.map(skill => `<span class="skill-pill">${skill}</span>`).join('')}
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                if (softSkills.length > 0) {
+                    skillsHtml += `
+                        <div class="skills-group">
+                            <div class="skills-group-title">Soft Skills</div>
+                            <div class="skills-pills">
+                                ${softSkills.map(skill => `<span class="skill-pill">${skill}</span>`).join('')}
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                if (toolsSkills.length > 0) {
+                    skillsHtml += `
+                        <div class="skills-group">
+                            <div class="skills-group-title">Tools</div>
+                            <div class="skills-pills">
+                                ${toolsSkills.map(skill => `<span class="skill-pill">${skill}</span>`).join('')}
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                // Build preview HTML
+                let previewHTML = `
+                    <div class="resume-header">
+                        <div class="resume-name">${fullName || 'Your Name'}</div>
+                        <div class="resume-contact">
+                            ${email ? `<span>${email}</span>` : ''}
+                            ${phone ? `<span>${phone}</span>` : ''}
+                            ${location ? `<span>${location}</span>` : ''}
+                        </div>
+                    </div>
+                `;
+                
+                if (summary) {
+                    previewHTML += `
+                        <div class="resume-section">
+                            <div class="resume-section-title">Summary</div>
+                            <div class="resume-item-desc">${summary.replace(/\n/g, '<br>')}</div>
+                        </div>
+                    `;
+                }
+                
+                if (educationHtml) {
+                    previewHTML += `
+                        <div class="resume-section">
+                            <div class="resume-section-title">Education</div>
+                            ${educationHtml}
+                        </div>
+                    `;
+                }
+                
+                if (experienceHtml) {
+                    previewHTML += `
+                        <div class="resume-section">
+                            <div class="resume-section-title">Experience</div>
+                            ${experienceHtml}
+                        </div>
+                    `;
+                }
+                
+                if (projectsHtml) {
+                    previewHTML += `
+                        <div class="resume-section">
+                            <div class="resume-section-title">Projects</div>
+                            ${projectsHtml}
+                        </div>
+                    `;
+                }
+                
+                if (skillsHtml) {
+                    previewHTML += `
+                        <div class="resume-section">
+                            <div class="resume-section-title">Skills</div>
+                            ${skillsHtml}
+                        </div>
+                    `;
+                }
+                
+                if (linksHtml) {
+                    previewHTML += `
+                        <div class="resume-section">
+                            <div class="resume-section-title">Links</div>
+                            <div class="resume-skills">${linksHtml}</div>
+                        </div>
+                    `;
+                }
+                
+                previewDiv.innerHTML = previewHTML;
+                previewDiv.className = `resume-preview template-${currentTemplate}`;
+            }
+
+            function updateFinalPreview() {
+                const finalPreview = document.getElementById('finalPreview');
+                if (!finalPreview) return;
+                
+                // Get ALL form values directly from the DOM
+                const fullName = document.getElementById('fullName')?.value || '';
+                const email = document.getElementById('email')?.value || '';
+                const phone = document.getElementById('phone')?.value || '';
+                const location = document.getElementById('location')?.value || '';
+                const summary = document.getElementById('summary')?.value || '';
+                
+                // Get education entries directly from DOM
+                const eduEntries = document.querySelectorAll('.education-entry');
+                let educationHtml = '';
+                eduEntries.forEach(entry => {
+                    const degree = entry.querySelector('.edu-degree')?.value || '';
+                    const school = entry.querySelector('.edu-school')?.value || '';
+                    const year = entry.querySelector('.edu-year')?.value || '';
+                    if (degree || school || year) {
+                        educationHtml += `
+                            <div class="resume-item">
+                                <div class="resume-item-title">${degree || 'Degree'}</div>
+                                <div class="resume-item-subtitle">${school || 'Institution'} · ${year || 'Year'}</div>
+                            </div>
+                        `;
+                    }
+                });
+                
+                // Get experience entries directly from DOM
+                const expEntries = document.querySelectorAll('.experience-entry');
+                let experienceHtml = '';
+                expEntries.forEach(entry => {
+                    const title = entry.querySelector('.exp-title')?.value || '';
+                    const company = entry.querySelector('.exp-company')?.value || '';
+                    const duration = entry.querySelector('.exp-duration')?.value || '';
+                    const desc = entry.querySelector('.exp-desc')?.value || '';
+                    if (title || company) {
+                        experienceHtml += `
+                            <div class="resume-item">
+                                <div class="resume-item-title">${title || 'Job Title'}</div>
+                                <div class="resume-item-subtitle">${company || 'Company'} · ${duration || 'Duration'}</div>
+                                ${desc ? `<div class="resume-item-desc">${desc.replace(/\n/g, '<br>')}</div>` : ''}
+                            </div>
+                        `;
+                    }
+                });
+                
+                // Get projects from resumeState
+                let projectsHtml = '';
+                if (resumeState.projects && resumeState.projects.length > 0) {
+                    projectsHtml = '<div class="projects-grid">';
+                    resumeState.projects.forEach(project => {
+                        if (project.title || project.description || (project.techStack && project.techStack.length > 0)) {
+                            projectsHtml += `
+                                <div class="project-card">
+                                    ${project.title ? `<div class="project-card-title">${project.title}</div>` : ''}
+                                    ${project.description ? `<div class="project-card-desc">${project.description}</div>` : ''}
+                                    ${project.techStack && project.techStack.length > 0 ? `
+                                        <div class="project-card-tech">
+                                            ${project.techStack.map(tech => `<span class="tech-pill">${tech}</span>`).join('')}
+                                        </div>
+                                    ` : ''}
+                                    <div class="project-links">
+                                        ${project.liveUrl ? `<a href="${project.liveUrl}" class="project-link" target="_blank">🔗 Live</a>` : ''}
+                                        ${project.githubUrl ? `<a href="${project.githubUrl}" class="project-link" target="_blank">📁 GitHub</a>` : ''}
+                                    </div>
+                                </div>
+                            `;
+                        }
+                    });
+                    projectsHtml += '</div>';
+                }
+                
+                // Get skills from skillCategories
+                const technicalSkills = skillCategories.technical?.skills || [];
+                const softSkills = skillCategories.soft?.skills || [];
+                const toolsSkills = skillCategories.tools?.skills || [];
+                
+                // Get links
+                const github = document.getElementById('github')?.value || '';
+                const linkedin = document.getElementById('linkedin')?.value || '';
+                const links = [];
+                if (github) links.push(github);
+                if (linkedin) links.push(linkedin);
+                const linksHtml = links.length ? links.join(' · ') : '';
+                
+                // For modern template, build two-column layout
+                if (currentTemplate === 'modern') {
+                    let modernPreview = `
+                        <div style="display: grid; grid-template-columns: 30% 70%; gap: 2rem; min-height: 100%;">
+                            <!-- Sidebar -->
+                            <div style="background: var(--accent-light); padding: 1.5rem; border-radius: 12px; height: fit-content;">
+                                <div style="margin-bottom: 2rem;">
+                                    <h3 style="font-size: 1rem; font-weight: 600; color: var(--accent-dark); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em;">Contact</h3>
+                                    <div style="font-size: 0.85rem; color: #333; line-height: 1.6;">
+                                        ${fullName ? `<div style="font-weight: 500; margin-bottom: 0.5rem;">${fullName}</div>` : ''}
+                                        ${email ? `<div>${email}</div>` : ''}
+                                        ${phone ? `<div>${phone}</div>` : ''}
+                                        ${location ? `<div>${location}</div>` : ''}
+                                    </div>
+                                </div>
+                                
+                                ${technicalSkills.length > 0 ? `
+                                    <div style="margin-bottom: 2rem;">
+                                        <h3 style="font-size: 1rem; font-weight: 600; color: var(--accent-dark); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em;">Technical Skills</h3>
+                                        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                                            ${technicalSkills.map(skill => `
+                                                <span style="background: var(--accent-color); color: white; padding: 0.25rem 0.75rem; border-radius: 30px; font-size: 0.8rem;">${skill}</span>
+                                            `).join('')}
+                                        </div>
+                                    </div>
+                                ` : ''}
+                                
+                                ${toolsSkills.length > 0 ? `
+                                    <div style="margin-bottom: 2rem;">
+                                        <h3 style="font-size: 1rem; font-weight: 600; color: var(--accent-dark); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em;">Tools</h3>
+                                        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                                            ${toolsSkills.map(skill => `
+                                                <span style="background: var(--accent-color); color: white; padding: 0.25rem 0.75rem; border-radius: 30px; font-size: 0.8rem;">${skill}</span>
+                                            `).join('')}
+                                        </div>
+                                    </div>
+                                ` : ''}
+                                
+                                ${softSkills.length > 0 ? `
+                                    <div style="margin-bottom: 2rem;">
+                                        <h3 style="font-size: 1rem; font-weight: 600; color: var(--accent-dark); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em;">Soft Skills</h3>
+                                        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                                            ${softSkills.map(skill => `
+                                                <span style="background: var(--accent-color); color: white; padding: 0.25rem 0.75rem; border-radius: 30px; font-size: 0.8rem;">${skill}</span>
+                                            `).join('')}
+                                        </div>
+                                    </div>
+                                ` : ''}
+                            </div>
+                            
+                            <!-- Main Content -->
+                            <div style="padding-right: 1rem;">
+                                ${summary ? `
+                                    <div style="margin-bottom: 2rem;">
+                                        <h3 style="font-size: 1rem; font-weight: 600; color: var(--accent-color); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em;">Summary</h3>
+                                        <div style="font-size: 0.9rem; color: #555; line-height: 1.6;">${summary.replace(/\n/g, '<br>')}</div>
+                                    </div>
+                                ` : ''}
+                                
+                                ${educationHtml ? `
+                                    <div style="margin-bottom: 2rem;">
+                                        <h3 style="font-size: 1rem; font-weight: 600; color: var(--accent-color); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em;">Education</h3>
+                                        ${educationHtml}
+                                    </div>
+                                ` : ''}
+                                
+                                ${experienceHtml ? `
+                                    <div style="margin-bottom: 2rem;">
+                                        <h3 style="font-size: 1rem; font-weight: 600; color: var(--accent-color); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em;">Experience</h3>
+                                        ${experienceHtml}
+                                    </div>
+                                ` : ''}
+                                
+                                ${projectsHtml ? `
+                                    <div style="margin-bottom: 2rem;">
+                                        <h3 style="font-size: 1rem; font-weight: 600; color: var(--accent-color); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em;">Projects</h3>
+                                        ${projectsHtml}
+                                    </div>
+                                ` : ''}
+                                
+                                ${linksHtml ? `
+                                    <div>
+                                        <h3 style="font-size: 1rem; font-weight: 600; color: var(--accent-color); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em;">Links</h3>
+                                        <div style="font-size: 0.85rem; color: #666;">${linksHtml}</div>
+                                    </div>
+                                ` : ''}
+                            </div>
+                        </div>
+                    `;
+                    
+                    finalPreview.innerHTML = modernPreview;
+                    finalPreview.className = `resume-preview template-${currentTemplate}`;
+                    return;
+                }
+                
+                // For classic and minimal templates (single column)
+                let skillsHtml = '';
+                if (technicalSkills.length > 0) {
+                    skillsHtml += `
+                        <div class="skills-group">
+                            <div class="skills-group-title">Technical</div>
+                            <div class="skills-pills">
+                                ${technicalSkills.map(skill => `<span class="skill-pill">${skill}</span>`).join('')}
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                if (softSkills.length > 0) {
+                    skillsHtml += `
+                        <div class="skills-group">
+                            <div class="skills-group-title">Soft Skills</div>
+                            <div class="skills-pills">
+                                ${softSkills.map(skill => `<span class="skill-pill">${skill}</span>`).join('')}
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                if (toolsSkills.length > 0) {
+                    skillsHtml += `
+                        <div class="skills-group">
+                            <div class="skills-group-title">Tools</div>
+                            <div class="skills-pills">
+                                ${toolsSkills.map(skill => `<span class="skill-pill">${skill}</span>`).join('')}
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                // Build preview HTML
+                let previewHTML = `
+                    <div class="resume-header">
+                        <div class="resume-name">${fullName || 'Your Name'}</div>
+                        <div class="resume-contact">
+                            ${email ? `<span>${email}</span>` : ''}
+                            ${phone ? `<span>${phone}</span>` : ''}
+                            ${location ? `<span>${location}</span>` : ''}
+                        </div>
+                    </div>
+                `;
+                
+                if (summary) {
+                    previewHTML += `
+                        <div class="resume-section">
+                            <div class="resume-section-title">Summary</div>
+                            <div class="resume-item-desc">${summary.replace(/\n/g, '<br>')}</div>
+                        </div>
+                    `;
+                }
+                
+                if (educationHtml) {
+                    previewHTML += `
+                        <div class="resume-section">
+                            <div class="resume-section-title">Education</div>
+                            ${educationHtml}
+                        </div>
+                    `;
+                }
+                
+                if (experienceHtml) {
+                    previewHTML += `
+                        <div class="resume-section">
+                            <div class="resume-section-title">Experience</div>
+                            ${experienceHtml}
+                        </div>
+                    `;
+                }
+                
+                if (projectsHtml) {
+                    previewHTML += `
+                        <div class="resume-section">
+                            <div class="resume-section-title">Projects</div>
+                            ${projectsHtml}
+                        </div>
+                    `;
+                }
+                
+                if (skillsHtml) {
+                    previewHTML += `
+                        <div class="resume-section">
+                            <div class="resume-section-title">Skills</div>
+                            ${skillsHtml}
+                        </div>
+                    `;
+                }
+                
+                if (linksHtml) {
+                    previewHTML += `
+                        <div class="resume-section">
+                            <div class="resume-section-title">Links</div>
+                            <div class="resume-skills">${linksHtml}</div>
+                        </div>
+                    `;
+                }
+                
+                finalPreview.innerHTML = previewHTML;
+                finalPreview.className = `resume-preview template-${currentTemplate}`;
+            }
+
+            // ========== LOAD STATE INTO UI ==========
+            function loadStateIntoUI() {
+                // Personal info
+                document.getElementById('fullName').value = resumeState.personal.fullName || '';
+                document.getElementById('email').value = resumeState.personal.email || '';
+                document.getElementById('phone').value = resumeState.personal.phone || '';
+                document.getElementById('location').value = resumeState.personal.location || '';
+                
+                // Summary
+                document.getElementById('summary').value = resumeState.summary || '';
+                
+                // Education
+                const eduContainer = document.getElementById('educationContainer');
+                eduContainer.innerHTML = '';
+                if (resumeState.education.length === 0) {
+                    // Add one empty education entry
+                    addEducationEntry(eduContainer);
+                } else {
+                    resumeState.education.forEach(edu => {
+                        addEducationEntry(eduContainer, edu.degree, edu.school, edu.year);
+                    });
+                }
+                
+                // Experience
+                const expContainer = document.getElementById('experienceContainer');
+                expContainer.innerHTML = '';
+                if (resumeState.experience.length === 0) {
+                    // Add one empty experience entry
+                    addExperienceEntry(expContainer);
+                } else {
+                    resumeState.experience.forEach(exp => {
+                        addExperienceEntry(expContainer, exp.title, exp.company, exp.duration, exp.description);
+                    });
+                }
+                
+                // Skills
+                if (resumeState.skills) {
+                    skillCategories.technical.skills = resumeState.skills.technical || [];
+                    skillCategories.soft.skills = resumeState.skills.soft || [];
+                    skillCategories.tools.skills = resumeState.skills.tools || [];
+                    
+                    renderSkillCategory('technical');
+                    renderSkillCategory('soft');
+                    renderSkillCategory('tools');
+                }
+                
+                // Projects
+                if (resumeState.projects && resumeState.projects.length > 0) {
+                    const projectsContainer = document.getElementById('projectsContainer');
+                    projectsContainer.innerHTML = '';
+                    
+                    resumeState.projects.forEach(project => {
+                        const projectEntry = document.createElement('div');
+                        projectEntry.className = `project-entry ${project.collapsed ? 'collapsed' : ''}`;
+                        projectEntry.id = project.id;
+                        projectEntry.innerHTML = `
+                            <div class="project-header" onclick="toggleProject('${project.id}')">
+                                <span class="project-title">${project.title || 'New Project'}</span>
+                                <div class="project-actions">
+                                    <button class="project-delete" onclick="deleteProject('${project.id}', event)">×</button>
+                                    <span class="project-expand">▼</span>
+                                </div>
+                            </div>
+                            <div class="project-content">
+                                <div class="form-row">
+                                    <label>Project Title</label>
+                                    <input type="text" placeholder="e.g. E-commerce Platform" class="project-title-input" value="${(project.title || '').replace(/"/g, '&quot;')}" oninput="updateProjectTitle('${project.id}', this.value); handleInputChange()">
+                                </div>
+                                <div class="form-row">
+                                    <label>Description (max 200 chars)</label>
+                                    <textarea placeholder="Describe your project..." class="project-desc-input" maxlength="200" oninput="updateProjectDesc('${project.id}', this.value); updateCharCounter(this); handleInputChange()">${(project.description || '').replace(/"/g, '&quot;')}</textarea>
+                                    <div class="char-counter">${(project.description || '').length}/200</div>
+                                </div>
+                                <div class="form-row">
+                                    <label>Tech Stack</label>
+                                    <div class="tag-input-container project-tech-container" id="tech-${project.id}">
+                                        ${(project.techStack || []).map(tech => `
+                                            <span class="tag">
+                                                ${tech}
+                                                <button class="tag-remove" onclick="removeProjectTech('${project.id}', '${tech.replace(/'/g, "\\'")}', event)">×</button>
+                                            </span>
+                                        `).join('')}
+                                        <input type="text" class="tag-input-field" placeholder="Type tech and press Enter..." onkeydown="addProjectTech(event, '${project.id}')">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <label>Live URL (optional)</label>
+                                    <input type="url" placeholder="https://..." class="project-live-input" value="${(project.liveUrl || '').replace(/"/g, '&quot;')}" oninput="updateProjectLive('${project.id}', this.value); handleInputChange()">
+                                </div>
+                                <div class="form-row">
+                                    <label>GitHub URL (optional)</label>
+                                    <input type="url" placeholder="https://github.com/..." class="project-github-input" value="${(project.githubUrl || '').replace(/"/g, '&quot;')}" oninput="updateProjectGithub('${project.id}', this.value); handleInputChange()">
+                                </div>
+                            </div>
+                        `;
+                        projectsContainer.appendChild(projectEntry);
+                        
+                        // Update character counter
+                        const textarea = projectEntry.querySelector('.project-desc-input');
+                        if (textarea) {
+                            updateCharCounter(textarea);
+                        }
+                    });
+                } else {
+                    // Add one empty project entry if no projects
+                    const projectsContainer = document.getElementById('projectsContainer');
+                    projectsContainer.innerHTML = '';
+                    const projectId = 'project_' + Date.now();
+                    
+                    const projectEntry = document.createElement('div');
+                    projectEntry.className = 'project-entry';
+                    projectEntry.id = projectId;
+                    projectEntry.innerHTML = `
+                        <div class="project-header" onclick="toggleProject('${projectId}')">
+                            <span class="project-title">New Project</span>
+                            <div class="project-actions">
+                                <button class="project-delete" onclick="deleteProject('${projectId}', event)">×</button>
+                                <span class="project-expand">▼</span>
+                            </div>
+                        </div>
+                        <div class="project-content">
+                            <div class="form-row">
+                                <label>Project Title</label>
+                                <input type="text" placeholder="e.g. E-commerce Platform" class="project-title-input" oninput="updateProjectTitle('${projectId}', this.value); handleInputChange()">
+                            </div>
+                            <div class="form-row">
+                                <label>Description (max 200 chars)</label>
+                                <textarea placeholder="Describe your project..." class="project-desc-input" maxlength="200" oninput="updateProjectDesc('${projectId}', this.value); updateCharCounter(this); handleInputChange()"></textarea>
+                                <div class="char-counter">0/200</div>
+                            </div>
+                            <div class="form-row">
+                                <label>Tech Stack</label>
+                                <div class="tag-input-container project-tech-container" id="tech-${projectId}">
+                                    <input type="text" class="tag-input-field" placeholder="Type tech and press Enter..." onkeydown="addProjectTech(event, '${projectId}')">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <label>Live URL (optional)</label>
+                                <input type="url" placeholder="https://..." class="project-live-input" oninput="updateProjectLive('${projectId}', this.value); handleInputChange()">
+                            </div>
+                            <div class="form-row">
+                                <label>GitHub URL (optional)</label>
+                                <input type="url" placeholder="https://github.com/..." class="project-github-input" oninput="updateProjectGithub('${projectId}', this.value); handleInputChange()">
+                            </div>
+                        </div>
+                    `;
+                    projectsContainer.appendChild(projectEntry);
+                    
+                    if (!resumeState.projects) resumeState.projects = [];
+                    resumeState.projects.push({
+                        id: projectId,
+                        title: 'New Project',
+                        description: '',
+                        techStack: [],
+                        liveUrl: '',
+                        githubUrl: '',
+                        collapsed: false
+                    });
+                }
+                
+                // Links
+                document.getElementById('github').value = resumeState.links.github || '';
+                document.getElementById('linkedin').value = resumeState.links.linkedin || '';
+                
+                // Set template
+                setTemplate(currentTemplate);
+                
+                // Set color
+                setColor(currentColor);
+                
+                // Update preview and score
+                updatePreview();
+                calculateATSScore();
+            }
+
+            // ========== TEMPLATE/COLOR CLICK HANDLERS ==========
+            function setupTemplateAndColorPickers() {
+                // Template cards in builder
+                document.querySelectorAll('#builder .template-card').forEach(card => {
+                    card.addEventListener('click', () => {
+                        const template = card.dataset.template;
+                        setTemplate(template);
+                        updatePreview();
+                        updateFinalPreview();
+                        calculateATSScore();
+                    });
+                });
+                
+                // Template cards in preview
+                document.querySelectorAll('#preview .template-card').forEach(card => {
+                    card.addEventListener('click', () => {
+                        const template = card.dataset.template;
+                        setTemplate(template);
+                        updateFinalPreview();
+                        calculateATSScore();
+                    });
+                });
+                
+                // Color circles in builder
+                document.querySelectorAll('#builder .color-circle').forEach(circle => {
+                    circle.addEventListener('click', () => {
+                        const color = circle.dataset.color;
+                        setColor(color);
+                        updatePreview();
+                        updateFinalPreview();
+                        calculateATSScore();
+                    });
+                });
+                
+                // Color circles in preview
+                document.querySelectorAll('#preview .color-circle').forEach(circle => {
+                    circle.addEventListener('click', () => {
+                        const color = circle.dataset.color;
+                        setColor(color);
+                        updateFinalPreview();
+                        calculateATSScore();
+                    });
+                });
+            }
+
+            // ========== LOCAL STORAGE ==========
+            function loadState() {
+                try {
+                    const saved = localStorage.getItem(STORAGE_KEY);
+                    if (saved) {
+                        return JSON.parse(saved);
+                    }
+                } catch (e) {
+                    console.error('Failed to load state:', e);
+                }
+                return JSON.parse(JSON.stringify(defaultState));
+            }
+
+            function saveState() {
+                try {
+                    // Gather current form data
+                    const state = {
+                        personal: {
+                            fullName: document.getElementById('fullName')?.value || '',
+                            email: document.getElementById('email')?.value || '',
+                            phone: document.getElementById('phone')?.value || '',
+                            location: document.getElementById('location')?.value || ''
+                        },
+                        summary: document.getElementById('summary')?.value || '',
+                        education: [],
+                        experience: [],
+                        projects: resumeState.projects || [],
+                        skills: {
+                            technical: skillCategories.technical.skills,
+                            soft: skillCategories.soft.skills,
+                            tools: skillCategories.tools.skills
+                        },
+                        links: {
+                            github: document.getElementById('github')?.value || '',
+                            linkedin: document.getElementById('linkedin')?.value || ''
+                        }
+                    };
+
+                    // Gather education entries
+                    document.querySelectorAll('.education-entry').forEach(entry => {
+                        state.education.push({
+                            degree: entry.querySelector('.edu-degree')?.value || '',
+                            school: entry.querySelector('.edu-school')?.value || '',
+                            year: entry.querySelector('.edu-year')?.value || ''
+                        });
+                    });
+
+                    // Gather experience entries
+                    document.querySelectorAll('.experience-entry').forEach(entry => {
+                        state.experience.push({
+                            title: entry.querySelector('.exp-title')?.value || '',
+                            company: entry.querySelector('.exp-company')?.value || '',
+                            duration: entry.querySelector('.exp-duration')?.value || '',
+                            description: entry.querySelector('.exp-desc')?.value || ''
+                        });
+                    });
+
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+                    
+                    const dot = document.querySelector('.autosave-dot');
+                    if (dot) {
+                        dot.style.opacity = '1';
+                        setTimeout(() => {
+                            dot.style.opacity = '0.7';
+                        }, 200);
+                    }
+                } catch (e) {
+                    console.error('Failed to save state:', e);
+                }
+            }
+
+            // ========== EDUCATION/EXPERIENCE HELPERS ==========
+            function addEducationEntry(container, degree = '', school = '', year = '') {
+                const entry = document.createElement('div');
+                entry.className = 'entry-group education-entry';
+                entry.innerHTML = `
+                    <div class="form-row">
+                        <label>Degree</label>
+                        <input type="text" placeholder="B.E. Computer Science" class="edu-degree" value="${degree.replace(/"/g, '&quot;')}" oninput="handleInputChange()">
+                    </div>
+                    <div class="form-row">
+                        <label>Institution</label>
+                        <input type="text" placeholder="University name" class="edu-school" value="${school.replace(/"/g, '&quot;')}" oninput="handleInputChange()">
+                    </div>
+                    <div class="form-row">
+                        <label>Graduation year</label>
+                        <input type="text" placeholder="2026" class="edu-year" value="${year.replace(/"/g, '&quot;')}" oninput="handleInputChange()">
+                    </div>
+                `;
+                container.appendChild(entry);
+            }
+
+            function addExperienceEntry(container, title = '', company = '', duration = '', desc = '') {
+                const entry = document.createElement('div');
+                entry.className = 'entry-group experience-entry';
+                entry.innerHTML = `
+                    <div class="form-row">
+                        <label>Job title</label>
+                        <input type="text" placeholder="Product Designer" class="exp-title" value="${title.replace(/"/g, '&quot;')}" oninput="handleInputChange()">
+                    </div>
+                    <div class="form-row">
+                        <label>Company</label>
+                        <input type="text" placeholder="Company name" class="exp-company" value="${company.replace(/"/g, '&quot;')}" oninput="handleInputChange()">
+                    </div>
+                    <div class="form-row">
+                        <label>Duration</label>
+                        <input type="text" placeholder="2022 — present" class="exp-duration" value="${duration.replace(/"/g, '&quot;')}" oninput="handleInputChange()">
+                    </div>
+                    <div class="form-row">
+                        <label>Description</label>
+                        <textarea placeholder="Key responsibilities and achievements..." class="exp-desc" oninput="handleInputChange()">${desc.replace(/"/g, '&quot;')}</textarea>
+                    </div>
+                `;
+                container.appendChild(entry);
+            }
+
+            // ========== TOAST NOTIFICATION ==========
+            function showToast(message) {
+                const toast = document.createElement('div');
+                toast.className = 'toast';
+                toast.textContent = message;
+                document.body.appendChild(toast);
+                
+                setTimeout(() => {
+                    toast.remove();
+                }, 3000);
+            }
+
+            // ========== PLAIN TEXT GENERATION ==========
+            function generatePlainText() {
+                const fullName = document.getElementById('fullName')?.value || 'Your Name';
+                const email = document.getElementById('email')?.value || '';
+                const phone = document.getElementById('phone')?.value || '';
+                const location = document.getElementById('location')?.value || '';
+                const summary = document.getElementById('summary')?.value || '';
+                
+                let text = `${fullName}\n`;
+                if (email || phone || location) {
+                    text += `${email} · ${phone} · ${location}\n`;
+                }
+                text += '\n';
+                
+                if (summary) {
+                    text += `SUMMARY\n${summary}\n\n`;
+                }
+                
+                // Education
+                const eduEntries = document.querySelectorAll('.education-entry');
+                if (eduEntries.length > 0) {
+                    text += 'EDUCATION\n';
+                    eduEntries.forEach(entry => {
+                        const degree = entry.querySelector('.edu-degree')?.value || '';
+                        const school = entry.querySelector('.edu-school')?.value || '';
+                        const year = entry.querySelector('.edu-year')?.value || '';
+                        if (degree || school || year) {
+                            text += `• ${degree}`;
+                            if (school) text += `, ${school}`;
+                            if (year) text += ` · ${year}`;
+                            text += '\n';
+                        }
+                    });
+                    text += '\n';
+                }
+                
+                // Experience
+                const expEntries = document.querySelectorAll('.experience-entry');
+                if (expEntries.length > 0) {
+                    text += 'EXPERIENCE\n';
+                    expEntries.forEach(entry => {
+                        const title = entry.querySelector('.exp-title')?.value || '';
+                        const company = entry.querySelector('.exp-company')?.value || '';
+                        const duration = entry.querySelector('.exp-duration')?.value || '';
+                        const desc = entry.querySelector('.exp-desc')?.value || '';
+                        
+                        if (title || company) {
+                            text += `• ${title}`;
+                            if (company) text += `, ${company}`;
+                            if (duration) text += ` · ${duration}`;
+                            text += '\n';
+                            
+                            if (desc) {
+                                const lines = desc.split('\n');
+                                lines.forEach(line => {
+                                    if (line.trim()) {
+                                        text += `  ${line.trim()}\n`;
+                                    }
+                                });
+                            }
+                        }
+                    });
+                    text += '\n';
+                }
+                
+                // Projects
+                if (resumeState.projects && resumeState.projects.length > 0) {
+                    text += 'PROJECTS\n';
+                    resumeState.projects.forEach(project => {
+                        if (project.title) {
+                            text += `• ${project.title}\n`;
+                            if (project.description) {
+                                const lines = project.description.split('\n');
+                                lines.forEach(line => {
+                                    if (line.trim()) {
+                                        text += `  ${line.trim()}\n`;
+                                    }
+                                });
+                            }
+                            if (project.techStack && project.techStack.length > 0) {
+                                text += `  Tech: ${project.techStack.join(', ')}\n`;
+                            }
+                        }
+                    });
+                    text += '\n';
+                }
+                
+                // Skills
+                const technicalSkills = skillCategories.technical.skills;
+                const softSkills = skillCategories.soft.skills;
+                const toolsSkills = skillCategories.tools.skills;
+                
+                if (technicalSkills.length > 0 || softSkills.length > 0 || toolsSkills.length > 0) {
+                    text += 'SKILLS\n';
+                    if (technicalSkills.length > 0) {
+                        text += `Technical: ${technicalSkills.join(' · ')}\n`;
+                    }
+                    if (softSkills.length > 0) {
+                        text += `Soft Skills: ${softSkills.join(' · ')}\n`;
+                    }
+                    if (toolsSkills.length > 0) {
+                        text += `Tools: ${toolsSkills.join(' · ')}\n`;
+                    }
+                    text += '\n';
+                }
+                
+                // Links
+                const github = document.getElementById('github')?.value || '';
+                const linkedin = document.getElementById('linkedin')?.value || '';
+                if (github || linkedin) {
+                    text += 'LINKS\n';
+                    if (github) text += `GitHub: ${github}\n`;
+                    if (linkedin) text += `LinkedIn: ${linkedin}\n`;
+                }
+                
+                return text;
+            }
+
+            // ========== COPY TO CLIPBOARD ==========
+            function copyToClipboard(text, buttonId = 'copyTextBtn') {
+                // Try modern clipboard API
+                if (navigator.clipboard && window.isSecureContext) {
+                    navigator.clipboard.writeText(text).then(() => {
+                        showCopySuccess(buttonId);
+                    }).catch(err => {
+                        console.error('Clipboard API failed:', err);
+                        fallbackCopy(text, buttonId);
+                    });
+                } else {
+                    fallbackCopy(text, buttonId);
+                }
+            }
+            
+            function fallbackCopy(text, buttonId) {
+                const textarea = document.getElementById('copyFallback');
+                textarea.value = text;
+                textarea.select();
+                textarea.setSelectionRange(0, 99999);
+                
+                try {
+                    document.execCommand('copy');
+                    showCopySuccess(buttonId);
+                } catch (err) {
+                    console.error('Fallback copy failed:', err);
+                    alert('Unable to copy. Please select the text manually.');
+                }
+                
+                textarea.value = '';
+            }
+            
+            function showCopySuccess(buttonId) {
+                const btn = document.getElementById(buttonId);
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<span>✓</span> Copied!';
+                btn.classList.add('success');
+                
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.classList.remove('success');
+                }, 2000);
+            }
+
+            // ========== EVENT HANDLERS ==========
+            window.handleInputChange = function() {
+                updatePreview();
+                calculateATSScore();
+                saveState();
+                
+                if (window.location.pathname === '/preview') {
+                    updateFinalPreview();
+                    validateResume();
+                } else if (window.location.pathname === '/proof') {
+                    // Re-render proof page when data changes
+                    renderProofPage();
+                }
+            };
+
+            // Add education
+            document.getElementById('addEducation')?.addEventListener('click', function() {
+                const container = document.getElementById('educationContainer');
+                addEducationEntry(container);
+                handleInputChange();
+            });
+
+            // Add experience
+            document.getElementById('addExperience')?.addEventListener('click', function() {
+                const container = document.getElementById('experienceContainer');
+                addExperienceEntry(container);
+                handleInputChange();
+            });
+
+            // PDF button - FIXED
+            document.getElementById('printResumeBtn')?.addEventListener('click', function() {
+                validateResume();
+                // First update the final preview to ensure latest data
+                updateFinalPreview();
+                // Small delay to ensure preview is updated
+                setTimeout(() => {
+                    window.print();
+                    showToast('Print dialog opened. Choose "Save as PDF" to download.');
+                }, 100);
+            });
+
+            // Copy text button
+            document.getElementById('copyTextBtn')?.addEventListener('click', function() {
+                validateResume();
+                const text = generatePlainText();
+                copyToClipboard(text, 'copyTextBtn');
+            });
+
+            // ========== PROFESSIONAL SAMPLE DATA ==========
+            document.getElementById('loadSampleBtn')?.addEventListener('click', function() {
+                // Personal Info - Professional
+                document.getElementById('fullName').value = 'Sarah Johnson';
+                document.getElementById('email').value = 'sarah.johnson@email.com';
+                document.getElementById('phone').value = '+1 (415) 555-0123';
+                document.getElementById('location').value = 'San Francisco, CA';
+                
+                // Summary - Professional with action verbs
+                document.getElementById('summary').value = 'Senior Full Stack Developer with 8+ years of experience building scalable web applications. Led development of 5+ production apps serving 100K+ users. Expert in React, Node.js, and cloud architecture. Passionate about clean code, performance optimization, and mentoring junior developers.';
+                
+                // Education - Professional
+                const eduContainer = document.getElementById('educationContainer');
+                eduContainer.innerHTML = '';
+                addEducationEntry(eduContainer, 'M.S. Computer Science', 'Stanford University', '2018');
+                addEducationEntry(eduContainer, 'B.S. Software Engineering', 'UC Berkeley', '2016');
+                
+                // Experience - Professional with bullet points
+                const expContainer = document.getElementById('experienceContainer');
+                expContainer.innerHTML = '';
+                addExperienceEntry(expContainer, 'Senior Full Stack Developer', 'TechCorp Inc.', '2021 — Present', 
+                    'Led development of microservices architecture serving 500K+ daily active users\n' +
+                    'Improved API response time by 40% through database optimization and caching\n' +
+                    'Mentored 5 junior developers, conducting code reviews and technical training\n' +
+                    'Architected cloud infrastructure on AWS reducing costs by 30%');
+                
+                addExperienceEntry(expContainer, 'Full Stack Developer', 'StartupHub', '2018 — 2021', 
+                    'Built responsive web applications using React, Node.js, and PostgreSQL\n' +
+                    'Implemented CI/CD pipelines reducing deployment time by 60%\n' +
+                    'Collaborated with product team to deliver features ahead of schedule\n' +
+                    'Wrote comprehensive unit and integration tests achieving 90% coverage');
+                
+                // Projects - Professional
+                const projectsContainer = document.getElementById('projectsContainer');
+                projectsContainer.innerHTML = '';
+                
+                // Project 1
+                const projectId1 = 'project_' + Date.now();
+                const projectId2 = 'project_' + (Date.now() + 1);
+                
+                resumeState.projects = [
+                    {
+                        id: projectId1,
+                        title: 'Cloud Task Manager',
+                        description: 'Enterprise task management system with real-time updates, team collaboration, and analytics dashboard. Used by 50+ teams.',
+                        techStack: ['React', 'Node.js', 'MongoDB', 'Socket.io', 'Redis'],
+                        liveUrl: 'https://taskmanager.demo.com',
+                        githubUrl: 'https://github.com/sarahj/taskmanager',
+                        collapsed: false
+                    },
+                    {
+                        id: projectId2,
+                        title: 'EcoTrack Mobile App',
+                        description: 'React Native app for tracking carbon footprint with 10K+ downloads. Features include data visualization, gamification, and social sharing.',
+                        techStack: ['React Native', 'Firebase', 'D3.js', 'Redux'],
+                        liveUrl: 'https://ecotrack.app',
+                        githubUrl: 'https://github.com/sarahj/ecotrack',
+                        collapsed: false
+                    }
+                ];
+                
+                // Render first project
+                const projectEntry1 = document.createElement('div');
+                projectEntry1.className = 'project-entry';
+                projectEntry1.id = projectId1;
+                projectEntry1.innerHTML = `
+                    <div class="project-header" onclick="toggleProject('${projectId1}')">
+                        <span class="project-title">Cloud Task Manager</span>
+                        <div class="project-actions">
+                            <button class="project-delete" onclick="deleteProject('${projectId1}', event)">×</button>
+                            <span class="project-expand">▼</span>
+                        </div>
+                    </div>
+                    <div class="project-content">
+                        <div class="form-row">
+                            <label>Project Title</label>
+                            <input type="text" class="project-title-input" value="Cloud Task Manager" oninput="updateProjectTitle('${projectId1}', this.value); handleInputChange()">
+                        </div>
+                        <div class="form-row">
+                            <label>Description (max 200 chars)</label>
+                            <textarea class="project-desc-input" maxlength="200" oninput="updateProjectDesc('${projectId1}', this.value); updateCharCounter(this); handleInputChange()">Enterprise task management system with real-time updates, team collaboration, and analytics dashboard. Used by 50+ teams.</textarea>
+                            <div class="char-counter">112/200</div>
+                        </div>
+                        <div class="form-row">
+                            <label>Tech Stack</label>
+                            <div class="tag-input-container project-tech-container" id="tech-${projectId1}">
+                                <span class="tag">React<button class="tag-remove" onclick="removeProjectTech('${projectId1}', 'React', event)">×</button></span>
+                                <span class="tag">Node.js<button class="tag-remove" onclick="removeProjectTech('${projectId1}', 'Node.js', event)">×</button></span>
+                                <span class="tag">MongoDB<button class="tag-remove" onclick="removeProjectTech('${projectId1}', 'MongoDB', event)">×</button></span>
+                                <span class="tag">Socket.io<button class="tag-remove" onclick="removeProjectTech('${projectId1}', 'Socket.io', event)">×</button></span>
+                                <span class="tag">Redis<button class="tag-remove" onclick="removeProjectTech('${projectId1}', 'Redis', event)">×</button></span>
+                                <input type="text" class="tag-input-field" placeholder="Type tech and press Enter..." onkeydown="addProjectTech(event, '${projectId1}')">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <label>Live URL (optional)</label>
+                            <input type="url" class="project-live-input" value="https://taskmanager.demo.com" oninput="updateProjectLive('${projectId1}', this.value); handleInputChange()">
+                        </div>
+                        <div class="form-row">
+                            <label>GitHub URL (optional)</label>
+                            <input type="url" class="project-github-input" value="https://github.com/sarahj/taskmanager" oninput="updateProjectGithub('${projectId1}', this.value); handleInputChange()">
+                        </div>
+                    </div>
+                `;
+                projectsContainer.appendChild(projectEntry1);
+                
+                // Render second project
+                const projectEntry2 = document.createElement('div');
+                projectEntry2.className = 'project-entry';
+                projectEntry2.id = projectId2;
+                projectEntry2.innerHTML = `
+                    <div class="project-header" onclick="toggleProject('${projectId2}')">
+                        <span class="project-title">EcoTrack Mobile App</span>
+                        <div class="project-actions">
+                            <button class="project-delete" onclick="deleteProject('${projectId2}', event)">×</button>
+                            <span class="project-expand">▼</span>
+                        </div>
+                    </div>
+                    <div class="project-content">
+                        <div class="form-row">
+                            <label>Project Title</label>
+                            <input type="text" class="project-title-input" value="EcoTrack Mobile App" oninput="updateProjectTitle('${projectId2}', this.value); handleInputChange()">
+                        </div>
+                        <div class="form-row">
+                            <label>Description (max 200 chars)</label>
+                            <textarea class="project-desc-input" maxlength="200" oninput="updateProjectDesc('${projectId2}', this.value); updateCharCounter(this); handleInputChange()">React Native app for tracking carbon footprint with 10K+ downloads. Features include data visualization, gamification, and social sharing.</textarea>
+                            <div class="char-counter">145/200</div>
+                        </div>
+                        <div class="form-row">
+                            <label>Tech Stack</label>
+                            <div class="tag-input-container project-tech-container" id="tech-${projectId2}">
+                                <span class="tag">React Native<button class="tag-remove" onclick="removeProjectTech('${projectId2}', 'React Native', event)">×</button></span>
+                                <span class="tag">Firebase<button class="tag-remove" onclick="removeProjectTech('${projectId2}', 'Firebase', event)">×</button></span>
+                                <span class="tag">D3.js<button class="tag-remove" onclick="removeProjectTech('${projectId2}', 'D3.js', event)">×</button></span>
+                                <span class="tag">Redux<button class="tag-remove" onclick="removeProjectTech('${projectId2}', 'Redux', event)">×</button></span>
+                                <input type="text" class="tag-input-field" placeholder="Type tech and press Enter..." onkeydown="addProjectTech(event, '${projectId2}')">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <label>Live URL (optional)</label>
+                            <input type="url" class="project-live-input" value="https://ecotrack.app" oninput="updateProjectLive('${projectId2}', this.value); handleInputChange()">
+                        </div>
+                        <div class="form-row">
+                            <label>GitHub URL (optional)</label>
+                            <input type="url" class="project-github-input" value="https://github.com/sarahj/ecotrack" oninput="updateProjectGithub('${projectId2}', this.value); handleInputChange()">
+                        </div>
+                    </div>
+                `;
+                projectsContainer.appendChild(projectEntry2);
+                
+                // Skills - Professional
+                skillCategories.technical.skills = ['JavaScript', 'TypeScript', 'React', 'Node.js', 'Python', 'SQL', 'MongoDB', 'GraphQL'];
+                skillCategories.soft.skills = ['Team Leadership', 'Problem Solving', 'Communication', 'Agile', 'Mentoring'];
+                skillCategories.tools.skills = ['Git', 'Docker', 'AWS', 'Kubernetes', 'Jenkins', 'Jira'];
+                
+                renderSkillCategory('technical');
+                renderSkillCategory('soft');
+                renderSkillCategory('tools');
+                
+                // Links - Professional
+                document.getElementById('github').value = 'github.com/sarahjohnson';
+                document.getElementById('linkedin').value = 'linkedin.com/in/sarahjohnson';
+                
+                handleInputChange();
+                
+                showToast('Professional sample data loaded!');
+            });
+
+            // ========== VALIDATION ==========
+            function validateResume() {
+                const fullName = document.getElementById('fullName')?.value || '';
+                const projectsCount = resumeState.projects?.length || 0;
+                const expEntries = document.querySelectorAll('.experience-entry');
+                const hasExperience = Array.from(expEntries).some(entry => {
+                    const title = entry.querySelector('.exp-title')?.value || '';
+                    const company = entry.querySelector('.exp-company')?.value || '';
+                    return title || company;
+                });
+                
+                const warningDiv = document.getElementById('validationWarning');
+                
+                if (!fullName || (projectsCount === 0 && !hasExperience)) {
+                    warningDiv.classList.remove('hidden');
+                } else {
+                    warningDiv.classList.add('hidden');
+                }
+            }
+
+            // ========== INITIALIZATION ==========
+            function initialize() {
+                setupTagInputs();
+                loadStateIntoUI();
+                setupTemplateAndColorPickers();
+                updatePreview();
+                calculateATSScore();
+                validateResume();
+                
+                // Initial render of skill categories
+                renderSkillCategory('technical');
+                renderSkillCategory('soft');
+                renderSkillCategory('tools');
+            }
+
+            initialize();
+        })();
+    </script>
+</body>
+</html>
